@@ -192,18 +192,27 @@ if __name__ == "__main__":
         base_url=BASE_URL
     )
 
+    # 手动输入参数
+    prompt = input("请输入文本提示词（prompt）：").strip()
+    negative_prompt = input("请输入负向提示词（negative_prompt，可留空）：").strip()
+    image = input("请输入图片路径或URL（image，可留空）：").strip()
+
+    metadata = {
+        "quality_level": "high"
+    }
+    if negative_prompt:
+        metadata["negative_prompt"] = negative_prompt
+
     # 1. 创建视频任务（以sora-2为例，可替换为其他模型）
     task_id = generator.create_video_task(
         model="sora-2",  # 替换为你要使用的模型ID
-        prompt="清晨森林中溪流流动，阳光透过树叶洒落，慢动作运镜，暖色调",  # 文本提示词
+        prompt=prompt,  # 文本提示词（手动输入）
+        image=image or None,  # 图片路径或URL，留空则不传
         duration=5,  # 视频时长5秒
         width=1080,  # 宽度
         height=1920,  # 高度（9:16竖屏）
         fps=24,  # 帧率
-        metadata={  # 扩展参数（示例：负向提示词）
-            "negative_prompt": "无多余人物、无模糊画面、无水印",
-            "quality_level": "high"
-        }
+        metadata=metadata
     )
 
     if not task_id:
