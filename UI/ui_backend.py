@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import ast
+import re
 import sys
 from pathlib import Path
 from typing import Any, Dict
+from urllib.parse import urlsplit, urlunsplit
 
 import requests
 
@@ -81,7 +83,39 @@ def load_keling_defaults() -> Dict[str, Any]:
 
 
 def normalize_base_root(base_url: str) -> str:
-    return veo_module.normalize_base_root(base_url)
+    value = (base_url or "").strip()
+    if not value:
+        return ""
+
+    value = re.sub(
+        r"^(https?://[^/]+?)(v1/videos|v2/videos/generations|kling/v1/videos)(.*)$",
+        r"\1/\2\3",
+        value,
+    )
+
+    # Repair common malformed inputs such as https://foxi-ai.topv1/videos
+    # by restoring the missing slash before versioned paths.
+    for marker in ("v1/videos", "v2/videos", "kling/v1/videos"):
+        token = marker.replace("/", "")
+        if token in value and marker not in value:
+            value = value.replace(token, f"/{marker}")
+
+    if value.startswith("http:/") and not value.startswith("http://"):
+        value = value.replace("http:/", "http://", 1)
+    if value.startswith("https:/") and not value.startswith("https://"):
+        value = value.replace("https:/", "https://", 1)
+
+    parts = urlsplit(value)
+    if parts.scheme and parts.netloc:
+        path = parts.path or ""
+        if path.endswith("/v1/videos"):
+            path = path[: -len("/v1/videos")]
+        elif path.endswith("/v2/videos/generations"):
+            path = path[: -len("/v2/videos/generations")]
+        normalized = urlunsplit((parts.scheme, parts.netloc, path.rstrip("/"), "", ""))
+        return normalized.rstrip("/")
+
+    return veo_module.normalize_base_root(value)
 
 
 def build_output_path(provider: str, output_name: str, task_id: str) -> Path:
@@ -176,6 +210,8 @@ def submit_veo_generation(
     output_name: str,
 ) -> Dict[str, Any]:
     normalized_base = normalize_base_root(base_url)
+    if not normalized_base:
+        raise RuntimeError("Veo Base URL 不能为空")
     client = veo_module.VeoVideoClient(api_key=api_key, base_root=normalized_base, timeout=timeout)
     result = client.create_generation(
         prompt=prompt,

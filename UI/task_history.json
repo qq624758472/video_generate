@@ -1,0 +1,24 @@
+[
+  {
+    "provider": "veo",
+    "task_id": "video_8d1727aa-8697-42ec-aab8-56c572f5f0a0",
+    "task_name": "veo_ui_test",
+    "prompt": "Early morning in ancient India near Sravasti. Misty countryside, trees, soft sunrise light, distant monastery, very slow aerial shot, calm and realistic cinematic style.",
+    "status": "submitted",
+    "progress": "",
+    "file": "",
+    "error": "HTTPSConnectionPool(host='foxi-ai.top', port=443): Max retries exceeded with url: /v2/videos/generations/video_8d1727aa-8697-42ec-aab8-56c572f5f0a0 (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x753ba3f05820>: Failed to establish a new connection: [Errno 1] Operation not permitted')))",
+    "api_key": "sk-y5q6SnVpzbXdAB9ekOEL4NHJeOOwA5A6ZeX54H7i8teToKwv",
+    "base_url": "https://foxi-ai.top",
+    "timeout": 900,
+    "poll_interval": 5,
+    "params": {
+      "model": "veo3.1-fast",
+      "aspect_ratio": "16:9",
+      "enhance_prompt": false,
+      "enable_upsample": true
+    },
+    "created_at": "2026-03-27 17:59:44",
+    "updated_at": "2026-03-27 18:08:45"
+  }
+]

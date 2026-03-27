@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 from PyQt6.QtCore import QThread, QTimer, Qt, pyqtSignal
+from PyQt6.QtGui import QCloseEvent
 from PyQt6.QtWidgets import (
     QApplication,
     QCheckBox,
@@ -19,6 +20,7 @@ from PyQt6.QtWidgets import (
     QHeaderView,
     QLineEdit,
     QMainWindow,
+    QMessageBox,
     QPushButton,
     QPlainTextEdit,
     QSpinBox,
@@ -116,8 +118,14 @@ class ProviderTab(QWidget):
     def append_log(self, text: str) -> None:
         self.log_output.append(text)
 
+    def set_log_text(self, text: str) -> None:
+        self.log_output.setPlainText(text)
+
     def set_busy(self, busy: bool) -> None:
         self.run_button.setEnabled(not busy)
+
+    def has_running_thread(self) -> bool:
+        return self.thread is not None and self.thread.isRunning()
 
 
 class SoraTab(ProviderTab):
@@ -188,6 +196,7 @@ class SoraTab(ProviderTab):
         self.thread = SubmitThread(ui_backend.submit_sora_generation, kwargs)
         self.thread.done_signal.connect(self.on_done)
         self.thread.error_signal.connect(self.on_error)
+        self.thread.finished.connect(self.on_thread_finished)
         self.set_busy(True)
         self.append_log("正在提交 Sora 任务...")
         self.thread.start()
@@ -200,6 +209,9 @@ class SoraTab(ProviderTab):
     def on_error(self, message: str) -> None:
         self.append_log(message)
         self.set_busy(False)
+
+    def on_thread_finished(self) -> None:
+        self.thread = None
 
 
 class VeoTab(ProviderTab):
@@ -243,6 +255,7 @@ class VeoTab(ProviderTab):
 
     def start_task(self) -> None:
         self.log_output.clear()
+        self.base_url.setText(ui_backend.normalize_base_root(self.base_url.text()))
         kwargs = {
             "api_key": self.api_key.text().strip(),
             "base_url": self.base_url.text().strip(),
@@ -258,6 +271,7 @@ class VeoTab(ProviderTab):
         self.thread = SubmitThread(ui_backend.submit_veo_generation, kwargs)
         self.thread.done_signal.connect(self.on_done)
         self.thread.error_signal.connect(self.on_error)
+        self.thread.finished.connect(self.on_thread_finished)
         self.set_busy(True)
         self.append_log("正在提交 Veo 任务...")
         self.thread.start()
@@ -270,6 +284,9 @@ class VeoTab(ProviderTab):
     def on_error(self, message: str) -> None:
         self.append_log(message)
         self.set_busy(False)
+
+    def on_thread_finished(self) -> None:
+        self.thread = None
 
 
 class KelingTab(ProviderTab):
@@ -336,6 +353,7 @@ class KelingTab(ProviderTab):
         self.thread = SubmitThread(ui_backend.submit_keling_generation, kwargs)
         self.thread.done_signal.connect(self.on_done)
         self.thread.error_signal.connect(self.on_error)
+        self.thread.finished.connect(self.on_thread_finished)
         self.set_busy(True)
         self.append_log("正在提交可灵任务...")
         self.thread.start()
@@ -348,6 +366,9 @@ class KelingTab(ProviderTab):
     def on_error(self, message: str) -> None:
         self.append_log(message)
         self.set_busy(False)
+
+    def on_thread_finished(self) -> None:
+        self.thread = None
 
 
 class QueryTab(QWidget):
@@ -402,6 +423,8 @@ class QueryTab(QWidget):
     def start_query(self) -> None:
         self.output.clear()
         provider = self.provider.currentText()
+        if provider == "veo":
+            self.base_url.setText(ui_backend.normalize_base_root(self.base_url.text()))
         kwargs = {
             "api_key": self.api_key.text().strip(),
             "base_url": self.base_url.text().strip(),
@@ -421,6 +444,9 @@ class QueryTab(QWidget):
         self.output.setPlainText(message)
         self.query_button.setEnabled(True)
 
+    def has_running_thread(self) -> bool:
+        return self.thread is not None and self.thread.isRunning()
+
 
 class MainWindow(QMainWindow):
     def __init__(self) -> None:
@@ -431,12 +457,17 @@ class MainWindow(QMainWindow):
         self.refresh_threads: dict[str, RefreshThread] = {}
 
         splitter = QSplitter(Qt.Orientation.Vertical)
-        tabs = QTabWidget()
-        tabs.addTab(SoraTab(self.add_task_record), "Sora")
-        tabs.addTab(VeoTab(self.add_task_record), "Veo")
-        tabs.addTab(KelingTab(self.add_task_record), "可灵")
-        tabs.addTab(QueryTab(), "任务查询")
-        splitter.addWidget(tabs)
+        self.tabs = QTabWidget()
+        self.sora_tab = SoraTab(self.add_task_record)
+        self.veo_tab = VeoTab(self.add_task_record)
+        self.keling_tab = KelingTab(self.add_task_record)
+        self.query_tab = QueryTab()
+        self.tabs.addTab(self.sora_tab, "Sora")
+        self.tabs.addTab(self.veo_tab, "Veo")
+        self.tabs.addTab(self.keling_tab, "可灵")
+        self.tabs.addTab(self.query_tab, "任务查询")
+        self.tabs.currentChanged.connect(self.on_tab_changed)
+        splitter.addWidget(self.tabs)
 
         history_widget = QWidget()
         history_layout = QVBoxLayout(history_widget)
@@ -464,11 +495,24 @@ class MainWindow(QMainWindow):
 
         self.load_tasks()
         self.render_task_table()
+        self.refresh_provider_logs()
 
         self.poll_timer = QTimer(self)
         self.poll_timer.timeout.connect(self.poll_active_tasks)
         self.poll_timer.start(5000)
         self.poll_active_tasks()
+
+    def running_threads(self) -> list[QThread]:
+        threads: list[QThread] = []
+        for thread in self.refresh_threads.values():
+            if thread.isRunning():
+                threads.append(thread)
+        for owner in (self.sora_tab, self.veo_tab, self.keling_tab):
+            if owner.thread is not None and owner.thread.isRunning():
+                threads.append(owner.thread)
+        if self.query_tab.thread is not None and self.query_tab.thread.isRunning():
+            threads.append(self.query_tab.thread)
+        return threads
 
     def now_text(self) -> str:
         return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -503,6 +547,43 @@ class MainWindow(QMainWindow):
             for col, value in enumerate(values):
                 self.task_table.setItem(row, col, QTableWidgetItem(value))
 
+    def build_provider_history_text(self, provider: str) -> str:
+        provider = provider.strip().lower()
+        lines: list[str] = []
+        for task in reversed(self.tasks):
+            if str(task.get("provider", "")).strip().lower() != provider:
+                continue
+            line = (
+                f"{task.get('created_at', '')} | "
+                f"{task.get('task_name', '')} | "
+                f"{task.get('task_id', '')} | "
+                f"{self.format_status(task)}"
+            )
+            file_path = str(task.get("file", "")).strip()
+            error = str(task.get("error", "")).strip()
+            if file_path:
+                line += f" | {file_path}"
+            elif error:
+                line += f" | {error}"
+            lines.append(line)
+        if not lines:
+            return f"暂无 {provider} 历史任务记录。"
+        return "\n".join(lines)
+
+    def refresh_provider_logs(self) -> None:
+        self.sora_tab.set_log_text(self.build_provider_history_text("sora"))
+        self.veo_tab.set_log_text(self.build_provider_history_text("veo"))
+        self.keling_tab.set_log_text(self.build_provider_history_text("keling"))
+
+    def on_tab_changed(self, index: int) -> None:
+        widget = self.tabs.widget(index)
+        if widget is self.sora_tab:
+            self.sora_tab.set_log_text(self.build_provider_history_text("sora"))
+        elif widget is self.veo_tab:
+            self.veo_tab.set_log_text(self.build_provider_history_text("veo"))
+        elif widget is self.keling_tab:
+            self.keling_tab.set_log_text(self.build_provider_history_text("keling"))
+
     def format_status(self, task: dict[str, Any]) -> str:
         status = str(task.get("status", "")).strip()
         progress = str(task.get("progress", "")).strip()
@@ -516,6 +597,7 @@ class MainWindow(QMainWindow):
         self.tasks.insert(0, record)
         self.save_tasks()
         self.render_task_table()
+        self.refresh_provider_logs()
         self.append_history_log(f"已记录任务 {record['task_name']} ({record['task_id']})")
         self.poll_task(record)
 
@@ -529,6 +611,7 @@ class MainWindow(QMainWindow):
             self.tasks[index] = merged
             self.save_tasks()
             self.render_task_table()
+            self.refresh_provider_logs()
             return
 
     def active_tasks(self) -> list[dict[str, Any]]:
@@ -554,12 +637,11 @@ class MainWindow(QMainWindow):
         self.refresh_threads[task_id] = thread
         thread.done_signal.connect(self.on_refresh_done)
         thread.error_signal.connect(self.on_refresh_error)
+        thread.finished.connect(lambda tid=task_id: self.on_refresh_thread_finished(tid))
         thread.start()
 
     def on_refresh_done(self, updated: dict[str, Any]) -> None:
         task_id = str(updated.get("task_id", "")).strip()
-        if task_id in self.refresh_threads:
-            self.refresh_threads.pop(task_id)
         self.update_task_record(task_id, updated)
         status = str(updated.get("status", ""))
         path = str(updated.get("file", "")).strip()
@@ -569,8 +651,6 @@ class MainWindow(QMainWindow):
             self.append_history_log(f"任务状态更新: {task_id} -> {self.format_status(updated)}")
 
     def on_refresh_error(self, task_id: str, message: str) -> None:
-        if task_id in self.refresh_threads:
-            self.refresh_threads.pop(task_id)
         for task in self.tasks:
             if str(task.get("task_id", "")) != task_id:
                 continue
@@ -581,8 +661,28 @@ class MainWindow(QMainWindow):
             task["updated_at"] = self.now_text()
             self.save_tasks()
             self.render_task_table()
+            self.refresh_provider_logs()
             self.append_history_log(f"任务刷新失败: {task_id} {task['error']}")
             break
+
+    def on_refresh_thread_finished(self, task_id: str) -> None:
+        if task_id in self.refresh_threads:
+            self.refresh_threads.pop(task_id)
+
+    def closeEvent(self, event: QCloseEvent) -> None:
+        running = self.running_threads()
+        if running:
+            self.append_history_log("检测到后台任务仍在运行，已阻止关闭窗口。")
+            QMessageBox.warning(
+                self,
+                "任务仍在运行",
+                "当前仍有后台提交或状态查询任务在运行，请等待它们结束后再关闭窗口。",
+            )
+            event.ignore()
+            return
+
+        self.poll_timer.stop()
+        super().closeEvent(event)
 
 
 def main() -> int:
