@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.mp4
+
+generated_jingang_tianting_kling/
+generated_jingang_tianting_v2/
