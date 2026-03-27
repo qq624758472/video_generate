@@ -3,27 +3,29 @@
 
 import json
 import traceback
-from functools import partial
+from datetime import datetime
+from pathlib import Path
 from typing import Any, Callable
 
-from PyQt6.QtCore import QThread, pyqtSignal
+from PyQt6.QtCore import QThread, QTimer, Qt, pyqtSignal
 from PyQt6.QtWidgets import (
     QApplication,
     QCheckBox,
     QComboBox,
     QDoubleSpinBox,
     QFormLayout,
-    QGridLayout,
     QGroupBox,
     QHBoxLayout,
-    QLabel,
+    QHeaderView,
     QLineEdit,
     QMainWindow,
-    QMessageBox,
     QPushButton,
     QPlainTextEdit,
     QSpinBox,
+    QSplitter,
     QTabWidget,
+    QTableWidget,
+    QTableWidgetItem,
     QTextEdit,
     QVBoxLayout,
     QWidget,
@@ -32,8 +34,10 @@ from PyQt6.QtWidgets import (
 import ui_backend
 
 
-class TaskThread(QThread):
-    log_signal = pyqtSignal(str)
+TASKS_PATH = Path(__file__).with_name("task_history.json")
+
+
+class SubmitThread(QThread):
     done_signal = pyqtSignal(dict)
     error_signal = pyqtSignal(str)
 
@@ -44,11 +48,27 @@ class TaskThread(QThread):
 
     def run(self) -> None:
         try:
-            result = self.fn(logger=self.log_signal.emit, **self.kwargs)
+            result = self.fn(**self.kwargs)
             self.done_signal.emit(result)
         except Exception as exc:
-            message = f"{exc}\n\n{traceback.format_exc()}"
-            self.error_signal.emit(message)
+            self.error_signal.emit(f"{exc}\n\n{traceback.format_exc()}")
+
+
+class RefreshThread(QThread):
+    done_signal = pyqtSignal(dict)
+    error_signal = pyqtSignal(str, str)
+
+    def __init__(self, record: dict[str, Any]) -> None:
+        super().__init__()
+        self.record = dict(record)
+
+    def run(self) -> None:
+        task_id = str(self.record.get("task_id", ""))
+        try:
+            result = ui_backend.refresh_task_record(self.record)
+            self.done_signal.emit(result)
+        except Exception as exc:
+            self.error_signal.emit(task_id, f"{exc}\n\n{traceback.format_exc()}")
 
 
 class QueryThread(QThread):
@@ -69,10 +89,11 @@ class QueryThread(QThread):
 
 
 class ProviderTab(QWidget):
-    def __init__(self, title: str) -> None:
+    def __init__(self, title: str, submit_callback: Callable[[dict[str, Any]], None]) -> None:
         super().__init__()
         self.title = title
-        self.thread: TaskThread | None = None
+        self.submit_callback = submit_callback
+        self.thread: SubmitThread | None = None
         self.layout = QVBoxLayout(self)
         self.layout.setContentsMargins(12, 12, 12, 12)
         self.layout.setSpacing(12)
@@ -83,7 +104,7 @@ class ProviderTab(QWidget):
         self.layout.addWidget(self.form_group)
 
         self.button_row = QHBoxLayout()
-        self.run_button = QPushButton(f"开始生成 {title} 视频")
+        self.run_button = QPushButton(f"提交 {title} 任务")
         self.button_row.addWidget(self.run_button)
         self.button_row.addStretch(1)
         self.layout.addLayout(self.button_row)
@@ -100,8 +121,8 @@ class ProviderTab(QWidget):
 
 
 class SoraTab(ProviderTab):
-    def __init__(self) -> None:
-        super().__init__("Sora")
+    def __init__(self, submit_callback: Callable[[dict[str, Any]], None]) -> None:
+        super().__init__("Sora", submit_callback)
         defaults = ui_backend.load_sora_defaults()
 
         self.api_key = QLineEdit(str(defaults.get("API_KEY", "")))
@@ -135,6 +156,7 @@ class SoraTab(ProviderTab):
 
         self.form_layout.addRow("API Key", self.api_key)
         self.form_layout.addRow("Base URL", self.base_url)
+        self.form_layout.addRow("任务名称", self.output_name)
         self.form_layout.addRow("Prompt", self.prompt)
         self.form_layout.addRow("Model", self.model)
         self.form_layout.addRow("Duration", self.duration)
@@ -143,7 +165,6 @@ class SoraTab(ProviderTab):
         self.form_layout.addRow("FPS", self.fps)
         self.form_layout.addRow("Timeout", self.timeout)
         self.form_layout.addRow("Poll Interval", self.poll_interval)
-        self.form_layout.addRow("Output Name", self.output_name)
         self.form_layout.addRow("Negative Prompt", self.negative_prompt)
 
         self.run_button.clicked.connect(self.start_task)
@@ -164,15 +185,16 @@ class SoraTab(ProviderTab):
             "output_name": self.output_name.text().strip(),
             "negative_prompt": self.negative_prompt.text().strip(),
         }
-        self.thread = TaskThread(ui_backend.run_sora_generation, kwargs)
-        self.thread.log_signal.connect(self.append_log)
+        self.thread = SubmitThread(ui_backend.submit_sora_generation, kwargs)
         self.thread.done_signal.connect(self.on_done)
         self.thread.error_signal.connect(self.on_error)
         self.set_busy(True)
+        self.append_log("正在提交 Sora 任务...")
         self.thread.start()
 
     def on_done(self, result: dict) -> None:
-        self.append_log(json.dumps(result, ensure_ascii=False, indent=2))
+        self.append_log(f"任务已提交: {result['task_id']}")
+        self.submit_callback(result)
         self.set_busy(False)
 
     def on_error(self, message: str) -> None:
@@ -181,12 +203,12 @@ class SoraTab(ProviderTab):
 
 
 class VeoTab(ProviderTab):
-    def __init__(self) -> None:
-        super().__init__("Veo")
+    def __init__(self, submit_callback: Callable[[dict[str, Any]], None]) -> None:
+        super().__init__("Veo", submit_callback)
         defaults = ui_backend.load_veo_defaults()
 
         self.api_key = QLineEdit(str(defaults.get("API_KEY", "")))
-        self.base_url = QLineEdit(ui_backend.veo_module.normalize_base_root(str(defaults.get("BASE_URL", ""))))
+        self.base_url = QLineEdit(ui_backend.normalize_base_root(str(defaults.get("BASE_URL", ""))))
         self.prompt = QPlainTextEdit()
         self.prompt.setPlainText(
             "Early morning in ancient India near Sravasti. Misty countryside, trees, soft sunrise light, distant monastery, very slow aerial shot, calm and realistic cinematic style."
@@ -208,6 +230,7 @@ class VeoTab(ProviderTab):
 
         self.form_layout.addRow("API Key", self.api_key)
         self.form_layout.addRow("Base URL", self.base_url)
+        self.form_layout.addRow("任务名称", self.output_name)
         self.form_layout.addRow("Prompt", self.prompt)
         self.form_layout.addRow("Model", self.model)
         self.form_layout.addRow("Aspect Ratio", self.aspect_ratio)
@@ -215,7 +238,6 @@ class VeoTab(ProviderTab):
         self.form_layout.addRow("", self.enable_upsample)
         self.form_layout.addRow("Timeout", self.timeout)
         self.form_layout.addRow("Poll Interval", self.poll_interval)
-        self.form_layout.addRow("Output Name", self.output_name)
 
         self.run_button.clicked.connect(self.start_task)
 
@@ -233,15 +255,16 @@ class VeoTab(ProviderTab):
             "poll_interval": self.poll_interval.value(),
             "output_name": self.output_name.text().strip(),
         }
-        self.thread = TaskThread(ui_backend.run_veo_generation, kwargs)
-        self.thread.log_signal.connect(self.append_log)
+        self.thread = SubmitThread(ui_backend.submit_veo_generation, kwargs)
         self.thread.done_signal.connect(self.on_done)
         self.thread.error_signal.connect(self.on_error)
         self.set_busy(True)
+        self.append_log("正在提交 Veo 任务...")
         self.thread.start()
 
     def on_done(self, result: dict) -> None:
-        self.append_log(json.dumps(result, ensure_ascii=False, indent=2))
+        self.append_log(f"任务已提交: {result['task_id']}")
+        self.submit_callback(result)
         self.set_busy(False)
 
     def on_error(self, message: str) -> None:
@@ -250,8 +273,8 @@ class VeoTab(ProviderTab):
 
 
 class KelingTab(ProviderTab):
-    def __init__(self) -> None:
-        super().__init__("可灵")
+    def __init__(self, submit_callback: Callable[[dict[str, Any]], None]) -> None:
+        super().__init__("可灵", submit_callback)
         defaults = ui_backend.load_keling_defaults()
 
         self.api_key = QLineEdit(str(defaults.get("API_KEY", "")))
@@ -281,6 +304,7 @@ class KelingTab(ProviderTab):
 
         self.form_layout.addRow("API Key", self.api_key)
         self.form_layout.addRow("Base URL", self.base_url)
+        self.form_layout.addRow("任务名称", self.output_name)
         self.form_layout.addRow("Prompt", self.prompt)
         self.form_layout.addRow("Negative Prompt", self.negative_prompt)
         self.form_layout.addRow("Model Name", self.model_name)
@@ -290,7 +314,6 @@ class KelingTab(ProviderTab):
         self.form_layout.addRow("CFG Scale", self.cfg_scale)
         self.form_layout.addRow("Timeout", self.timeout)
         self.form_layout.addRow("Poll Interval", self.poll_interval)
-        self.form_layout.addRow("Output Name", self.output_name)
 
         self.run_button.clicked.connect(self.start_task)
 
@@ -310,15 +333,16 @@ class KelingTab(ProviderTab):
             "poll_interval": self.poll_interval.value(),
             "output_name": self.output_name.text().strip(),
         }
-        self.thread = TaskThread(ui_backend.run_keling_generation, kwargs)
-        self.thread.log_signal.connect(self.append_log)
+        self.thread = SubmitThread(ui_backend.submit_keling_generation, kwargs)
         self.thread.done_signal.connect(self.on_done)
         self.thread.error_signal.connect(self.on_error)
         self.set_busy(True)
+        self.append_log("正在提交可灵任务...")
         self.thread.start()
 
     def on_done(self, result: dict) -> None:
-        self.append_log(json.dumps(result, ensure_ascii=False, indent=2))
+        self.append_log(f"任务已提交: {result['task_id']}")
+        self.submit_callback(result)
         self.set_busy(False)
 
     def on_error(self, message: str) -> None:
@@ -342,7 +366,6 @@ class QueryTab(QWidget):
         self.api_key = QLineEdit(ui_backend.load_sora_defaults().get("API_KEY", ""))
         self.base_url = QLineEdit(ui_backend.load_sora_defaults().get("BASE_URL", ""))
         self.task_id = QLineEdit()
-
         self.provider.currentTextChanged.connect(self.on_provider_changed)
 
         form.addRow("Provider", self.provider)
@@ -366,7 +389,7 @@ class QueryTab(QWidget):
     def on_provider_changed(self, provider: str) -> None:
         if provider == "veo":
             defaults = ui_backend.load_veo_defaults()
-            base_url = ui_backend.veo_module.normalize_base_root(str(defaults.get("BASE_URL", "")))
+            base_url = ui_backend.normalize_base_root(str(defaults.get("BASE_URL", "")))
         elif provider == "keling":
             defaults = ui_backend.load_keling_defaults()
             base_url = str(defaults.get("BASE_URL", ""))
@@ -403,14 +426,163 @@ class MainWindow(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
         self.setWindowTitle("Video Generate UI")
-        self.resize(1100, 820)
+        self.resize(1280, 900)
+        self.tasks: list[dict[str, Any]] = []
+        self.refresh_threads: dict[str, RefreshThread] = {}
 
+        splitter = QSplitter(Qt.Orientation.Vertical)
         tabs = QTabWidget()
-        tabs.addTab(SoraTab(), "Sora")
-        tabs.addTab(VeoTab(), "Veo")
-        tabs.addTab(KelingTab(), "可灵")
+        tabs.addTab(SoraTab(self.add_task_record), "Sora")
+        tabs.addTab(VeoTab(self.add_task_record), "Veo")
+        tabs.addTab(KelingTab(self.add_task_record), "可灵")
         tabs.addTab(QueryTab(), "任务查询")
-        self.setCentralWidget(tabs)
+        splitter.addWidget(tabs)
+
+        history_widget = QWidget()
+        history_layout = QVBoxLayout(history_widget)
+        history_layout.setContentsMargins(12, 12, 12, 12)
+        history_layout.setSpacing(8)
+
+        self.task_table = QTableWidget(0, 7)
+        self.task_table.setHorizontalHeaderLabels(["时间", "类型", "任务名称", "任务ID", "状态", "结果路径", "错误"])
+        self.task_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.task_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        self.task_table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
+        history_layout.addWidget(self.task_table, 1)
+
+        self.history_log = QTextEdit()
+        self.history_log.setReadOnly(True)
+        history_layout.addWidget(self.history_log, 1)
+        splitter.addWidget(history_widget)
+        splitter.setSizes([560, 320])
+
+        container = QWidget()
+        outer = QVBoxLayout(container)
+        outer.setContentsMargins(0, 0, 0, 0)
+        outer.addWidget(splitter)
+        self.setCentralWidget(container)
+
+        self.load_tasks()
+        self.render_task_table()
+
+        self.poll_timer = QTimer(self)
+        self.poll_timer.timeout.connect(self.poll_active_tasks)
+        self.poll_timer.start(5000)
+        self.poll_active_tasks()
+
+    def now_text(self) -> str:
+        return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    def append_history_log(self, text: str) -> None:
+        self.history_log.append(f"[{self.now_text()}] {text}")
+
+    def load_tasks(self) -> None:
+        if not TASKS_PATH.is_file():
+            self.tasks = []
+            return
+        try:
+            self.tasks = json.loads(TASKS_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            self.tasks = []
+
+    def save_tasks(self) -> None:
+        TASKS_PATH.write_text(json.dumps(self.tasks, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    def render_task_table(self) -> None:
+        self.task_table.setRowCount(len(self.tasks))
+        for row, task in enumerate(self.tasks):
+            values = [
+                str(task.get("created_at", "")),
+                str(task.get("provider", "")),
+                str(task.get("task_name", "")),
+                str(task.get("task_id", "")),
+                self.format_status(task),
+                str(task.get("file", "")),
+                str(task.get("error", "")),
+            ]
+            for col, value in enumerate(values):
+                self.task_table.setItem(row, col, QTableWidgetItem(value))
+
+    def format_status(self, task: dict[str, Any]) -> str:
+        status = str(task.get("status", "")).strip()
+        progress = str(task.get("progress", "")).strip()
+        return f"{status} {progress}".strip()
+
+    def add_task_record(self, task: dict[str, Any]) -> None:
+        record = dict(task)
+        now = self.now_text()
+        record["created_at"] = now
+        record["updated_at"] = now
+        self.tasks.insert(0, record)
+        self.save_tasks()
+        self.render_task_table()
+        self.append_history_log(f"已记录任务 {record['task_name']} ({record['task_id']})")
+        self.poll_task(record)
+
+    def update_task_record(self, task_id: str, updated: dict[str, Any]) -> None:
+        for index, task in enumerate(self.tasks):
+            if str(task.get("task_id")) != task_id:
+                continue
+            merged = dict(task)
+            merged.update(updated)
+            merged["updated_at"] = self.now_text()
+            self.tasks[index] = merged
+            self.save_tasks()
+            self.render_task_table()
+            return
+
+    def active_tasks(self) -> list[dict[str, Any]]:
+        active = []
+        for task in self.tasks:
+            status = str(task.get("status", "unknown")).strip().lower()
+            if status not in {"completed", "failed"}:
+                active.append(task)
+        return active
+
+    def poll_active_tasks(self) -> None:
+        for task in self.active_tasks():
+            task_id = str(task.get("task_id", "")).strip()
+            if not task_id or task_id in self.refresh_threads:
+                continue
+            self.poll_task(task)
+
+    def poll_task(self, task: dict[str, Any]) -> None:
+        task_id = str(task.get("task_id", "")).strip()
+        if not task_id:
+            return
+        thread = RefreshThread(task)
+        self.refresh_threads[task_id] = thread
+        thread.done_signal.connect(self.on_refresh_done)
+        thread.error_signal.connect(self.on_refresh_error)
+        thread.start()
+
+    def on_refresh_done(self, updated: dict[str, Any]) -> None:
+        task_id = str(updated.get("task_id", "")).strip()
+        if task_id in self.refresh_threads:
+            self.refresh_threads.pop(task_id)
+        self.update_task_record(task_id, updated)
+        status = str(updated.get("status", ""))
+        path = str(updated.get("file", "")).strip()
+        if status == "completed":
+            self.append_history_log(f"任务完成: {task_id} {path}")
+        else:
+            self.append_history_log(f"任务状态更新: {task_id} -> {self.format_status(updated)}")
+
+    def on_refresh_error(self, task_id: str, message: str) -> None:
+        if task_id in self.refresh_threads:
+            self.refresh_threads.pop(task_id)
+        for task in self.tasks:
+            if str(task.get("task_id", "")) != task_id:
+                continue
+            status = str(task.get("status", "unknown")).strip().lower()
+            if status in {"completed", "failed"}:
+                break
+            task["error"] = message.splitlines()[0]
+            task["updated_at"] = self.now_text()
+            self.save_tasks()
+            self.render_task_table()
+            self.append_history_log(f"任务刷新失败: {task_id} {task['error']}")
+            break
 
 
 def main() -> int:

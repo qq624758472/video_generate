@@ -3,9 +3,8 @@
 
 import ast
 import sys
-import time
 from pathlib import Path
-from typing import Any, Callable, Dict
+from typing import Any, Dict
 
 import requests
 
@@ -21,6 +20,20 @@ if str(ROOT_DIR / "keling") not in sys.path:
 import generate_video_with_character as sora_module  # noqa: E402
 import generate_veo_video as veo_module  # noqa: E402
 import test as sora_test_module  # noqa: E402
+
+
+STATUS_RUNNING = {
+    "submitted",
+    "queued",
+    "processing",
+    "running",
+    "in_progress",
+    "not_start",
+    "pending",
+    "unknown",
+}
+STATUS_SUCCESS = {"completed", "success", "succeeded"}
+STATUS_FAILED = {"failed", "failure", "error", "cancelled"}
 
 
 def load_python_assignments(script_path: Path, names: set[str]) -> Dict[str, Any]:
@@ -67,6 +80,10 @@ def load_keling_defaults() -> Dict[str, Any]:
     )
 
 
+def normalize_base_root(base_url: str) -> str:
+    return veo_module.normalize_base_root(base_url)
+
+
 def build_output_path(provider: str, output_name: str, task_id: str) -> Path:
     safe_name = output_name.strip() or provider
     out_dir = ROOT_DIR / "UI" / "generated" / provider
@@ -74,7 +91,25 @@ def build_output_path(provider: str, output_name: str, task_id: str) -> Path:
     return out_dir / f"{safe_name}_{task_id}.mp4"
 
 
-def run_sora_generation(
+def normalize_status(provider: str, status: str) -> str:
+    value = (status or "unknown").strip().lower()
+    if value in STATUS_SUCCESS:
+        return "completed"
+    if value in STATUS_FAILED:
+        return "failed"
+    if value in STATUS_RUNNING:
+        return value
+    return value or "unknown"
+
+
+def keling_text2video_url(base_url: str) -> str:
+    base = base_url.rstrip("/")
+    if base.endswith("/v1/videos"):
+        base = base[: -len("/v1/videos")]
+    return f"{base}/kling/v1/videos/text2video"
+
+
+def submit_sora_generation(
     *,
     api_key: str,
     base_url: str,
@@ -88,13 +123,11 @@ def run_sora_generation(
     poll_interval: int,
     output_name: str,
     negative_prompt: str,
-    logger: Callable[[str], None],
 ) -> Dict[str, Any]:
     metadata: Dict[str, Any] = {"quality_level": "high"}
     if negative_prompt.strip():
         metadata["negative_prompt"] = negative_prompt.strip()
 
-    logger("开始创建 Sora 视频任务")
     client = sora_module.VideoGenerator(api_key=api_key, base_url=base_url, timeout=timeout)
     task_id = client.create_video_task(
         model=model,
@@ -105,15 +138,31 @@ def run_sora_generation(
         fps=fps,
         metadata=metadata,
     )
-    logger(f"Sora 任务已创建: {task_id}")
-    client.wait_for_task_complete(task_id, poll_interval)
-    output_path = build_output_path("sora", output_name, task_id)
-    client.download_video(task_id, output_path)
-    logger(f"Sora 视频已保存: {output_path}")
-    return {"provider": "sora", "task_id": task_id, "file": str(output_path)}
+    return {
+        "provider": "sora",
+        "task_id": task_id,
+        "task_name": output_name.strip() or "sora_task",
+        "prompt": prompt,
+        "status": "submitted",
+        "progress": "",
+        "file": "",
+        "error": "",
+        "api_key": api_key,
+        "base_url": base_url,
+        "timeout": timeout,
+        "poll_interval": poll_interval,
+        "params": {
+            "model": model,
+            "duration": duration,
+            "width": width,
+            "height": height,
+            "fps": fps,
+            "negative_prompt": negative_prompt,
+        },
+    }
 
 
-def run_veo_generation(
+def submit_veo_generation(
     *,
     api_key: str,
     base_url: str,
@@ -125,10 +174,9 @@ def run_veo_generation(
     timeout: int,
     poll_interval: int,
     output_name: str,
-    logger: Callable[[str], None],
 ) -> Dict[str, Any]:
-    logger("开始创建 Veo 视频任务")
-    client = veo_module.VeoVideoClient(api_key=api_key, base_root=base_url, timeout=timeout)
+    normalized_base = normalize_base_root(base_url)
+    client = veo_module.VeoVideoClient(api_key=api_key, base_root=normalized_base, timeout=timeout)
     result = client.create_generation(
         prompt=prompt,
         model=model,
@@ -139,22 +187,29 @@ def run_veo_generation(
     task_id = str(result.get("id") or result.get("task_id") or "").strip()
     if not task_id:
         raise RuntimeError(f"Veo 接口未返回 task_id: {result}")
-    logger(f"Veo 任务已创建: {task_id}")
-    client.wait_for_completion(task_id, poll_interval)
-    output_path = build_output_path("veo", output_name, task_id)
-    client.download_video(task_id, output_path)
-    logger(f"Veo 视频已保存: {output_path}")
-    return {"provider": "veo", "task_id": task_id, "file": str(output_path)}
+    return {
+        "provider": "veo",
+        "task_id": task_id,
+        "task_name": output_name.strip() or "veo_task",
+        "prompt": prompt,
+        "status": "submitted",
+        "progress": "",
+        "file": "",
+        "error": "",
+        "api_key": api_key,
+        "base_url": normalized_base,
+        "timeout": timeout,
+        "poll_interval": poll_interval,
+        "params": {
+            "model": model,
+            "aspect_ratio": aspect_ratio,
+            "enhance_prompt": enhance_prompt,
+            "enable_upsample": enable_upsample,
+        },
+    }
 
 
-def keling_text2video_url(base_url: str) -> str:
-    base = base_url.rstrip("/")
-    if base.endswith("/v1/videos"):
-        base = base[: -len("/v1/videos")]
-    return f"{base}/kling/v1/videos/text2video"
-
-
-def run_keling_generation(
+def submit_keling_generation(
     *,
     api_key: str,
     base_url: str,
@@ -168,7 +223,6 @@ def run_keling_generation(
     timeout: int,
     poll_interval: int,
     output_name: str,
-    logger: Callable[[str], None],
 ) -> Dict[str, Any]:
     payload = {
         "model_name": model_name,
@@ -179,7 +233,6 @@ def run_keling_generation(
         "aspect_ratio": aspect_ratio,
         "duration": duration,
     }
-    logger("开始创建可灵视频任务")
     response = requests.post(
         keling_text2video_url(base_url),
         json=payload,
@@ -194,27 +247,28 @@ def run_keling_generation(
     task_id = str(result.get("id") or result.get("task_id") or "").strip()
     if not task_id:
         raise RuntimeError(f"可灵接口未返回 task_id: {result}")
-    logger(f"可灵任务已创建: {task_id}")
-
-    status_client = sora_test_module.VideoGenerator(api_key=api_key, base_url=base_url)
-    start_time = time.time()
-    while time.time() - start_time < timeout:
-        status_data = status_client.get_task_status(task_id) or {}
-        status = str(status_data.get("status", "unknown"))
-        progress = status_data.get("progress")
-        logger(f"可灵状态: {status} progress={progress}")
-        if status == "completed":
-            output_path = build_output_path("keling", output_name, task_id)
-            ok = status_client.download_video(task_id, str(output_path))
-            if not ok:
-                raise RuntimeError("可灵视频下载失败")
-            logger(f"可灵视频已保存: {output_path}")
-            return {"provider": "keling", "task_id": task_id, "file": str(output_path)}
-        if status == "failed":
-            raise RuntimeError(f"可灵任务失败: {status_data}")
-        time.sleep(poll_interval)
-
-    raise TimeoutError(f"可灵任务超时: {task_id}")
+    return {
+        "provider": "keling",
+        "task_id": task_id,
+        "task_name": output_name.strip() or "keling_task",
+        "prompt": prompt,
+        "status": "submitted",
+        "progress": "",
+        "file": "",
+        "error": "",
+        "api_key": api_key,
+        "base_url": base_url,
+        "timeout": timeout,
+        "poll_interval": poll_interval,
+        "params": {
+            "model_name": model_name,
+            "aspect_ratio": aspect_ratio,
+            "duration": duration,
+            "cfg_scale": cfg_scale,
+            "mode": mode,
+            "negative_prompt": negative_prompt,
+        },
+    }
 
 
 def query_task_status(
@@ -231,3 +285,45 @@ def query_task_status(
     client = sora_test_module.VideoGenerator(api_key=api_key, base_url=base_url)
     data = client.get_task_status(task_id)
     return data or {}
+
+
+def refresh_task_record(record: Dict[str, Any]) -> Dict[str, Any]:
+    provider = str(record.get("provider", "")).strip().lower()
+    api_key = str(record.get("api_key", "")).strip()
+    base_url = str(record.get("base_url", "")).strip()
+    task_id = str(record.get("task_id", "")).strip()
+    task_name = str(record.get("task_name", "")).strip() or provider
+
+    if not provider or not api_key or not base_url or not task_id:
+        raise RuntimeError("任务记录缺少必要字段")
+
+    raw = query_task_status(provider, api_key=api_key, base_url=base_url, task_id=task_id)
+    status = normalize_status(provider, str(raw.get("status", "unknown")))
+    progress = str(raw.get("progress", "") or "")
+
+    updated = dict(record)
+    updated["status"] = status
+    updated["progress"] = progress
+    updated["status_result"] = raw
+
+    if status == "completed":
+        output_path = str(updated.get("file", "")).strip()
+        if not output_path:
+            output_path = str(build_output_path(provider, task_name, task_id))
+        path_obj = Path(output_path)
+        if not path_obj.is_file():
+            if provider == "veo":
+                client = veo_module.VeoVideoClient(api_key=api_key, base_root=base_url, timeout=120)
+                client.download_video(task_id, path_obj)
+            else:
+                client = sora_test_module.VideoGenerator(api_key=api_key, base_url=base_url)
+                ok = client.download_video(task_id, str(path_obj))
+                if not ok:
+                    raise RuntimeError(f"{provider} 视频下载失败")
+        updated["file"] = str(path_obj)
+        updated["error"] = ""
+    elif status == "failed":
+        updated["file"] = ""
+        updated["error"] = str(raw.get("fail_reason") or raw.get("error") or "任务失败")
+
+    return updated
