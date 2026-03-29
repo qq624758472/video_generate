@@ -1,0 +1,32 @@
+{
+  "api": {
+    "api_key": "",
+    "base_url": "https://foxi-ai.top",
+    "timeout": 900,
+    "poll_interval": 5
+  },
+  "generation": {
+    "model": "veo3.1-fast",
+    "aspect_ratio": "16:9",
+    "enhance_prompt": false,
+    "enable_upsample": true,
+    "prompt": "Early morning in ancient India near Sravasti. Misty countryside, trees, soft sunrise light, distant monastery, very slow aerial shot, calm and realistic cinematic style.",
+    "negative_prompt": "blurry, text, watermark, low quality, distorted anatomy, extra limbs, modern objects",
+    "output_name": "veo_video",
+    "output_dir": "generated_veo"
+  },
+  "batch": {
+    "variants_per_scene": 2,
+    "start_index": 1,
+    "end_index": 9,
+    "output_dir": "generated_veo_batch"
+  },
+  "prompt_style": {
+    "common_style": "Epic Buddhist fantasy cinema, celestial realm above the clouds, colossal golden Buddha, sacred atmosphere, floating heavenly palaces, fragrant flower rain, glowing colorful aura, Dunhuang flying apsaras circling in the air, divine ribbons, grand scale, majestic light, slow camera movement, highly cinematic, 16:9 widescreen.",
+    "negative_prompt": "blurry, text, watermark, low quality, deformed face, deformed hands, extra limbs, modern buildings, modern clothing, chaotic composition",
+    "variant_notes": {
+      "1": "Version A: majestic establishing composition, slow and solemn movement, emphasize grandeur and sacred calm.",
+      "2": "Version B: more character-focused composition, richer depth, stronger emotional atmosphere, elegant cinematic detail."
+    }
+  }
+}

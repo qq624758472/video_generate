@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import ast
 import sys
 import time
 from pathlib import Path
@@ -10,51 +9,16 @@ from typing import Any, Dict
 
 import requests
 
+from config_utils import DEFAULT_CONFIG_PATH, build_request_prompt, load_config, normalize_base_root
 
-DEFAULT_BASE_URL = "https://foxi-ai.top"
+
 DEFAULT_CREATE_ENDPOINT = "/v2/videos/generations"
 DEFAULT_STATUS_ENDPOINT = "/v2/videos/generations/{task_id}"
 DEFAULT_CONTENT_ENDPOINT = "/v1/videos/{task_id}/content"
-DEFAULT_MODEL = "veo3.1-fast"
-DEFAULT_ASPECT_RATIO = "16:9"
-DEFAULT_TIMEOUT = 900
-DEFAULT_POLL_INTERVAL = 5
 
 
 class APIError(RuntimeError):
     pass
-
-
-def load_defaults_from_test_py(script_path: Path) -> Dict[str, Any]:
-    defaults: Dict[str, Any] = {}
-    if not script_path.is_file():
-        return defaults
-
-    try:
-        tree = ast.parse(script_path.read_text(encoding="utf-8"), filename=str(script_path))
-    except (OSError, SyntaxError):
-        return defaults
-
-    for node in tree.body:
-        if not isinstance(node, ast.Assign):
-            continue
-        for target in node.targets:
-            if not isinstance(target, ast.Name):
-                continue
-            if target.id not in {"API_KEY", "BASE_URL", "TIMEOUT", "POLL_INTERVAL"}:
-                continue
-            try:
-                defaults[target.id] = ast.literal_eval(node.value)
-            except Exception:
-                continue
-    return defaults
-
-
-def normalize_base_root(base_url: str) -> str:
-    base_url = base_url.rstrip("/")
-    if base_url.endswith("/v1/videos"):
-        return base_url[: -len("/v1/videos")]
-    return base_url
 
 
 class VeoVideoClient:
@@ -153,40 +117,49 @@ class VeoVideoClient:
 
 
 def parse_args() -> argparse.Namespace:
-    defaults = load_defaults_from_test_py(Path(__file__).with_name("test.py"))
     parser = argparse.ArgumentParser(description="使用 Veo 模型生成视频。")
-    parser.add_argument("--api-key", default=str(defaults.get("API_KEY", "")).strip())
-    parser.add_argument(
-        "--base-url",
-        default=normalize_base_root(str(defaults.get("BASE_URL", DEFAULT_BASE_URL)).strip() or DEFAULT_BASE_URL),
-    )
-    parser.add_argument("--prompt", required=True)
-    parser.add_argument("--model", default=DEFAULT_MODEL)
-    parser.add_argument("--aspect-ratio", default=DEFAULT_ASPECT_RATIO, choices=("16:9", "9:16"))
-    parser.add_argument("--enhance-prompt", action="store_true")
-    parser.add_argument("--enable-upsample", action="store_true")
-    parser.add_argument("--timeout", type=int, default=int(defaults.get("TIMEOUT", DEFAULT_TIMEOUT)))
-    parser.add_argument("--poll-interval", type=int, default=int(defaults.get("POLL_INTERVAL", DEFAULT_POLL_INTERVAL)))
-    parser.add_argument("--output", default="")
+    parser.add_argument("--config", default=DEFAULT_CONFIG_PATH, help="外部 JSON 配置文件路径")
     parser.add_argument("--no-wait", action="store_true")
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
-    if not args.api_key:
+    config = load_config(Path(args.config).expanduser().resolve())
+    api = config.get("api", {})
+    generation = config.get("generation", {})
+
+    api_key = str(api.get("api_key", "")).strip()
+    base_url = normalize_base_root(str(api.get("base_url", "")).strip())
+    timeout = int(api.get("timeout", 900))
+    poll_interval = int(api.get("poll_interval", 5))
+    model = str(generation.get("model", "veo3.1-fast")).strip()
+    aspect_ratio = str(generation.get("aspect_ratio", "16:9")).strip()
+    enhance_prompt = bool(generation.get("enhance_prompt", False))
+    enable_upsample = bool(generation.get("enable_upsample", True))
+    prompt = build_request_prompt(
+        str(generation.get("prompt", "")).strip(),
+        str(generation.get("negative_prompt", "")).strip(),
+    )
+    output_name = str(generation.get("output_name", "veo_video")).strip() or "veo_video"
+    output_dir = Path(str(generation.get("output_dir", "generated_veo")).strip() or "generated_veo")
+
+    if not api_key:
         print("缺少 API Key", file=sys.stderr)
         return 1
+    if not prompt:
+        print("缺少 prompt，请在 JSON 配置文件中填写 generation.prompt", file=sys.stderr)
+        return 1
 
-    client = VeoVideoClient(api_key=args.api_key, base_root=args.base_url, timeout=args.timeout)
+    client = VeoVideoClient(api_key=api_key, base_root=base_url, timeout=timeout)
 
     try:
         result = client.create_generation(
-            prompt=args.prompt,
-            model=args.model,
-            aspect_ratio=args.aspect_ratio,
-            enhance_prompt=args.enhance_prompt,
-            enable_upsample=args.enable_upsample,
+            prompt=prompt,
+            model=model,
+            aspect_ratio=aspect_ratio,
+            enhance_prompt=enhance_prompt,
+            enable_upsample=enable_upsample,
         )
         print(f"创建结果: {result}")
         task_id = str(result.get("id") or result.get("task_id") or "").strip()
@@ -197,8 +170,8 @@ def main() -> int:
         if args.no_wait:
             return 0
 
-        client.wait_for_completion(task_id, args.poll_interval)
-        output_path = Path(args.output) if args.output else Path("generated_veo") / f"{task_id}.mp4"
+        client.wait_for_completion(task_id, poll_interval)
+        output_path = output_dir / f"{output_name}_{task_id}.mp4"
         client.download_video(task_id, output_path)
         print(f"视频已保存: {output_path.resolve()}")
         return 0
