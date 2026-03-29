@@ -9,7 +9,13 @@ from typing import Any, Dict
 
 import requests
 
-from config_utils import DEFAULT_CONFIG_PATH, build_request_prompt, load_config, normalize_base_root
+from config_utils import (
+    DEFAULT_CONFIG_PATH,
+    build_request_prompt,
+    load_config,
+    normalize_base_root,
+    resolve_image_inputs,
+)
 
 
 DEFAULT_CREATE_ENDPOINT = "/v2/videos/generations"
@@ -40,14 +46,18 @@ class VeoVideoClient:
         aspect_ratio: str,
         enhance_prompt: bool,
         enable_upsample: bool,
+        images: list[str] | None = None,
     ) -> Dict[str, Any]:
         payload = {
             "prompt": prompt,
             "model": model,
-            "aspect_ratio": aspect_ratio,
             "enhance_prompt": enhance_prompt,
             "enable_upsample": enable_upsample,
         }
+        if aspect_ratio:
+            payload["aspect_ratio"] = aspect_ratio
+        if images:
+            payload["images"] = images
         response = self.session.post(
             f"{self.base_root}{DEFAULT_CREATE_ENDPOINT}",
             json=payload,
@@ -137,6 +147,8 @@ def main() -> int:
     aspect_ratio = str(generation.get("aspect_ratio", "16:9")).strip()
     enhance_prompt = bool(generation.get("enhance_prompt", False))
     enable_upsample = bool(generation.get("enable_upsample", True))
+    image_to_video = bool(generation.get("image_to_video", False))
+    images = resolve_image_inputs(list(generation.get("images", [])))
     prompt = build_request_prompt(
         str(generation.get("prompt", "")).strip(),
         str(generation.get("negative_prompt", "")).strip(),
@@ -150,6 +162,9 @@ def main() -> int:
     if not prompt:
         print("缺少 prompt，请在 JSON 配置文件中填写 generation.prompt", file=sys.stderr)
         return 1
+    if image_to_video and not images:
+        print("已启用图生视频，但 generation.images 为空", file=sys.stderr)
+        return 1
 
     client = VeoVideoClient(api_key=api_key, base_root=base_url, timeout=timeout)
 
@@ -157,9 +172,10 @@ def main() -> int:
         result = client.create_generation(
             prompt=prompt,
             model=model,
-            aspect_ratio=aspect_ratio,
+            aspect_ratio=aspect_ratio if not image_to_video or aspect_ratio else "",
             enhance_prompt=enhance_prompt,
             enable_upsample=enable_upsample,
+            images=images if image_to_video else None,
         )
         print(f"创建结果: {result}")
         task_id = str(result.get("id") or result.get("task_id") or "").strip()

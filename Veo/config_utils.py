@@ -2,7 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import ast
+import base64
 import json
+import mimetypes
+import os
 from pathlib import Path
 from typing import Any, Dict
 
@@ -69,6 +72,8 @@ def default_config_from_test(script_dir: Path) -> Dict[str, Any]:
             "aspect_ratio": "16:9",
             "enhance_prompt": False,
             "enable_upsample": True,
+            "image_to_video": False,
+            "images": [],
             "prompt": "",
             "negative_prompt": "",
             "output_name": "veo_video",
@@ -103,3 +108,24 @@ def build_request_prompt(prompt: str, negative_prompt: str) -> str:
     if not negative_prompt:
         return prompt
     return f"{prompt} Avoid: {negative_prompt}."
+
+
+def to_data_url(value: str) -> str:
+    raw = (value or "").strip()
+    if not raw:
+        return raw
+    if raw.startswith(("http://", "https://", "data:")):
+        return raw
+
+    path = Path(raw).expanduser().resolve()
+    if not path.is_file():
+        return raw
+
+    mime_type, _ = mimetypes.guess_type(path.name)
+    mime_type = mime_type or "image/jpeg"
+    encoded = base64.b64encode(path.read_bytes()).decode("utf-8")
+    return f"data:{mime_type};base64,{encoded}"
+
+
+def resolve_image_inputs(images: list[str]) -> list[str]:
+    return [to_data_url(item) for item in images if str(item).strip()]
