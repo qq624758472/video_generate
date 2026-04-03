@@ -1,0 +1,24 @@
+[
+  {
+    "output_name": "sample_text_video",
+    "prompt": "A cinematic ancient palace above the clouds, slow aerial movement, golden light, majestic atmosphere.",
+    "negative_prompt": "blur, watermark, text",
+    "model": "veo3.1-fast",
+    "aspect_ratio": "16:9",
+    "enhance_prompt": false,
+    "enable_upsample": true
+  },
+  {
+    "output_name": "sample_image_video",
+    "prompt": "Keep the same character identity and outfit as the reference image. Gentle wind, subtle blinking, soft cinematic portrait motion.",
+    "negative_prompt": "face change, identity drift, blur, watermark, text",
+    "model": "veo3.1-fast",
+    "aspect_ratio": "9:16",
+    "enhance_prompt": false,
+    "enable_upsample": true,
+    "image_to_video": true,
+    "images": [
+      "input/meining_standard_768x1024.jpg"
+    ]
+  }
+]
