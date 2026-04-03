@@ -1,0 +1,20 @@
+{
+  "api": {
+    "api_key": "sk-y5q6SnVpzbXdAB9ekOEL4NHJeOOwA5A6ZeX54H7i8teToKwv",
+    "base_url": "https://foxi-ai.top",
+    "timeout": 900,
+    "poll_interval": 5
+  },
+  "generation": {
+    "model": "veo3.1-fast",
+    "aspect_ratio": "9:16",
+    "enhance_prompt": false,
+    "enable_upsample": true,
+    "image_to_video": false,
+    "images": [],
+    "prompt": "竖屏 9:16，写实电影感，中国神话天宫场景。侧跟长镜头跟随仙官的脚步，缓缓掠过天宫主道。路面由整块羊脂白玉铺就，莹润通透，倒映两侧琪花瑶草。盛开的琼花挂着晨露，金蕊玉瓣，花瓣随风飘落；千年古柏苍劲挺拔，枝桠间缠绕赤金藤蔓，藤蔓挂满晶莹夜明珠，白日里泛着柔和珠光。道路两旁立着成对玉雕瑞兽，青龙、白虎、朱雀、玄武栩栩如生，玉身纹路清晰，鎏金镶边在阳光下熠熠生辉，细节极致华贵。画面神圣、富丽、空灵。无字幕，无文字，无水印。",
+    "negative_prompt": "现代街道，汽车，科幻，赛博朋克，西方花园，黑暗恐怖，血腥，卡通，动漫，搞笑，字幕，文字，水印，低清晰度，畸形人物",
+    "output_name": "tiangong_palace_road_9x16",
+    "output_dir": "outputs/generated_veo"
+  }
+}

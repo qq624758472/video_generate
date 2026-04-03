@@ -1,0 +1,20 @@
+{
+  "api": {
+    "api_key": "sk-y5q6SnVpzbXdAB9ekOEL4NHJeOOwA5A6ZeX54H7i8teToKwv",
+    "base_url": "https://foxi-ai.top",
+    "timeout": 900,
+    "poll_interval": 5
+  },
+  "generation": {
+    "model": "veo3.1-fast",
+    "aspect_ratio": "9:16",
+    "enhance_prompt": false,
+    "enable_upsample": true,
+    "image_to_video": false,
+    "images": [],
+    "prompt": "竖屏 9:16，写实电影感。镜头拍摄天宫宫墙与飞檐一角，金色飞檐优雅上翘，檐角有仙鸟雕饰和小玉铃，檐下悬挂成串彩色琉璃灯。微风吹动玉铃和灯串，暖光映在朱红宫墙上，形成流动彩影。画面华贵、神圣、精巧，突出天宫建筑细节，但保持完整小场景构图。无字幕，无文字。",
+    "negative_prompt": "现代建筑，霓虹灯牌，科幻，赛博朋克，黑暗恐怖，血腥，卡通，动漫，搞笑，字幕，文字，水印，低清晰度，畸形结构",
+    "output_name": "tiangong_eaves_corner_9x16_retry3",
+    "output_dir": "outputs/generated_veo"
+  }
+}

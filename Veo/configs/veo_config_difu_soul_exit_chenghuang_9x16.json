@@ -1,0 +1,20 @@
+{
+  "api": {
+    "api_key": "sk-y5q6SnVpzbXdAB9ekOEL4NHJeOOwA5A6ZeX54H7i8teToKwv",
+    "base_url": "https://foxi-ai.top",
+    "timeout": 900,
+    "poll_interval": 5
+  },
+  "generation": {
+    "model": "veo3.1-fast",
+    "aspect_ratio": "9:16",
+    "enhance_prompt": false,
+    "enable_upsample": true,
+    "image_to_video": false,
+    "images": [],
+    "prompt": "竖屏 9:16，写实电影感，中国民俗传说氛围。开场是暖色调卧室，一位老人安静地躺在床上，室内灯光温暖柔和，空气平静。镜头缓慢推进后，画面色调逐渐从暖黄色变成冷青灰色，房间瞬间变得阴冷安静。接着表现老人的魂体从身体里缓缓分离出来，先从躺着的状态慢慢坐起，再轻轻站起来，魂体半透明、朦胧发光，但保持人形真实感，不恐怖。镜头跟随魂体离开床边，穿过安静空荡的空间，最终来到城隍庙门口。城隍庙大门古老庄严，牌匾、石阶、灯笼、庙门结构清晰可见，整体神秘肃穆、超现实，但不血腥不惊悚。强调暖冷色调转变、灵魂出窍过程、从卧室到城隍庙门口的连续过渡。无字幕，无文字，无水印。",
+    "negative_prompt": "血腥，暴力，怪物袭击，夸张鬼脸，西方死神，丧尸，卡通，动漫，搞笑，字幕，文字，水印，低清晰度，手部畸形，多余肢体，现代医院，科幻，赛博朋克",
+    "output_name": "difu_soul_exit_chenghuang_9x16",
+    "output_dir": "outputs/generated_veo"
+  }
+}

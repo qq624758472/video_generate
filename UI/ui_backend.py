@@ -15,8 +15,8 @@ import requests
 ROOT_DIR = Path(__file__).resolve().parent.parent
 if str(ROOT_DIR / "sora") not in sys.path:
     sys.path.insert(0, str(ROOT_DIR / "sora"))
-if str(ROOT_DIR / "Veo") not in sys.path:
-    sys.path.insert(0, str(ROOT_DIR / "Veo"))
+if str(ROOT_DIR / "Veo" / "scripts") not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR / "Veo" / "scripts"))
 if str(ROOT_DIR / "keling") not in sys.path:
     sys.path.insert(0, str(ROOT_DIR / "keling"))
 

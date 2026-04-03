@@ -18,7 +18,7 @@ def parse_args() -> argparse.Namespace:
 
 def resolve_batch_paths(config: dict) -> tuple[Path, Path]:
     batch = config.get("batch", {})
-    out_dir = Path(str(batch.get("output_dir", "generated_veo_batch")).strip() or "generated_veo_batch")
+    out_dir = Path(str(batch.get("output_dir", "outputs/generated_veo_batch")).strip() or "outputs/generated_veo_batch")
     tasks_path = out_dir / "tasks.json"
     return out_dir, tasks_path
 

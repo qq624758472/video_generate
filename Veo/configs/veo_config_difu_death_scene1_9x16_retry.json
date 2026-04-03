@@ -1,0 +1,20 @@
+{
+  "api": {
+    "api_key": "sk-y5q6SnVpzbXdAB9ekOEL4NHJeOOwA5A6ZeX54H7i8teToKwv",
+    "base_url": "https://foxi-ai.top",
+    "timeout": 900,
+    "poll_interval": 5
+  },
+  "generation": {
+    "model": "veo3.1-fast",
+    "aspect_ratio": "9:16",
+    "enhance_prompt": false,
+    "enable_upsample": true,
+    "image_to_video": false,
+    "images": [],
+    "prompt": "竖屏 9:16，写实电影感。老人躺在床上，子孙围在床边拉着他的手，神情悲伤。特写镜头中，老人的手慢慢垂下，表示死亡。随后画面色调突然变成阴冷青灰，房间里子孙全部消失。镜头拉开，牛头、马面、黑无常、白无常出现在床边和房间深处，庄严肃穆，中国神话地府使者风格，神秘压迫，不血腥，不夸张。无字幕，无文字。",
+    "negative_prompt": "血浆，肢体残缺，丧尸，怪物攻击，西方死神，卡通，动漫，搞笑，字幕，文字，水印，低清晰度，手部畸形，多余肢体，现代医院，科幻，赛博朋克",
+    "output_name": "difu_death_scene1_9x16_retry",
+    "output_dir": "outputs/generated_veo"
+  }
+}

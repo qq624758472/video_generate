@@ -1,0 +1,20 @@
+{
+  "api": {
+    "api_key": "sk-y5q6SnVpzbXdAB9ekOEL4NHJeOOwA5A6ZeX54H7i8teToKwv",
+    "base_url": "https://foxi-ai.top",
+    "timeout": 900,
+    "poll_interval": 5
+  },
+  "generation": {
+    "model": "veo3.1-fast",
+    "aspect_ratio": "9:16",
+    "enhance_prompt": false,
+    "enable_upsample": true,
+    "image_to_video": false,
+    "images": [],
+    "prompt": "竖屏 9:16，写实电影感，中国民俗神话场景。镜头进入古老庄严的城隍庙内部，庙门高大，灯笼昏黄，殿内肃穆安静。魂体刚刚走入大殿，前方高处坐着威严庄重的城隍老爷，身穿古代官袍，案桌上摆放卷宗、名册、笔墨与印章。镜头表现城隍老爷正在为亡者办理登记户籍，翻阅生死簿与户籍册，核对姓名、籍贯和阳寿，动作沉稳有秩序，像古代官府审册，但不是审判恐怖场面。随后黑无常与白无常站到魂体两侧，示意登记完成，准备继续引路。最后镜头跟随黑白无常带着魂体走出城隍殿，朝更幽深的阴曹地府方向前行。整体气氛神秘、庄严、超现实，有完整流程感和仪式感，不血腥不惊悚。无字幕，无文字，无水印。",
+    "negative_prompt": "血腥，暴力，酷刑，恐怖鬼脸，夸张怪物，西方死神，丧尸，卡通，动漫，搞笑，字幕，文字，水印，低清晰度，手部畸形，多余肢体，现代办公室，现代警察局，科幻，赛博朋克",
+    "output_name": "difu_chenghuang_register_9x16",
+    "output_dir": "outputs/generated_veo"
+  }
+}

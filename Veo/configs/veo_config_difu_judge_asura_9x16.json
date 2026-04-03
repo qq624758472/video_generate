@@ -1,0 +1,20 @@
+{
+  "api": {
+    "api_key": "sk-y5q6SnVpzbXdAB9ekOEL4NHJeOOwA5A6ZeX54H7i8teToKwv",
+    "base_url": "https://foxi-ai.top",
+    "timeout": 900,
+    "poll_interval": 5
+  },
+  "generation": {
+    "model": "veo3.1-fast",
+    "aspect_ratio": "9:16",
+    "enhance_prompt": false,
+    "enable_upsample": true,
+    "image_to_video": false,
+    "images": [],
+    "prompt": "竖屏 9:16，写实电影感，中国神话轮回场景。阴曹地府的大殿中，一位判官站在高台上，豹眼狮鼻，面黑须长，头戴冕旒，披古代官袍，手持生死簿，形象威严庄重。大殿幽深肃穆，案台、卷宗、灯火和阴司建筑细节清晰。镜头缓慢推近判官，他俯视台下的亡魂，像在宣读命数，气场强大，画面有审判与宣判的仪式感。随后画面发生巨大转场，从阴冷幽暗的地府迅速切换到明亮壮丽的天宫世界，云海翻涌，金色宫阙耸立，神光照耀。主角在转场中完成投生变化，变成阿修罗人形象，保留人类轮廓但更英武、神异、带有非凡气势，站在天宫般的异界空间中。整体强调命运宣判、轮回转生、从地府到天宫的强烈对比。无字幕，无文字，无水印。",
+    "negative_prompt": "血腥，暴力，酷刑，怪物袭击，西方恶魔，西方天使，夸张恐怖，卡通，动漫，搞笑，字幕，文字，水印，低清晰度，手部畸形，多余肢体，现代法庭，现代城市，科幻，赛博朋克",
+    "output_name": "difu_judge_asura_9x16",
+    "output_dir": "outputs/generated_veo"
+  }
+}

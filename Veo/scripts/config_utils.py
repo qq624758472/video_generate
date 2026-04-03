@@ -13,7 +13,7 @@ from typing import Any, Dict
 DEFAULT_BASE_URL = "https://foxi-ai.top"
 DEFAULT_TIMEOUT = 900
 DEFAULT_POLL_INTERVAL = 5
-DEFAULT_CONFIG_PATH = "veo_config.json"
+DEFAULT_CONFIG_PATH = "configs/veo_config.json"
 
 
 def load_defaults_from_test_py(script_path: Path) -> Dict[str, Any]:
@@ -59,7 +59,10 @@ def deep_merge(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]
 
 
 def default_config_from_test(script_dir: Path) -> Dict[str, Any]:
-    defaults = load_defaults_from_test_py(script_dir / "test.py")
+    test_script = script_dir / "test.py"
+    if not test_script.is_file():
+        test_script = script_dir.parent / "scripts" / "test.py"
+    defaults = load_defaults_from_test_py(test_script)
     return {
         "api": {
             "api_key": str(defaults.get("API_KEY", "")).strip(),
@@ -77,13 +80,13 @@ def default_config_from_test(script_dir: Path) -> Dict[str, Any]:
             "prompt": "",
             "negative_prompt": "",
             "output_name": "veo_video",
-            "output_dir": "generated_veo",
+            "output_dir": "outputs/generated_veo",
         },
         "batch": {
             "variants_per_scene": 2,
             "start_index": 1,
             "end_index": 9,
-            "output_dir": "generated_veo_batch",
+            "output_dir": "outputs/generated_veo_batch",
         },
         "prompt_style": {
             "common_style": "",

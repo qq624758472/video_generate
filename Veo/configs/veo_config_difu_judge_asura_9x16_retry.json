@@ -1,0 +1,20 @@
+{
+  "api": {
+    "api_key": "sk-y5q6SnVpzbXdAB9ekOEL4NHJeOOwA5A6ZeX54H7i8teToKwv",
+    "base_url": "https://foxi-ai.top",
+    "timeout": 900,
+    "poll_interval": 5
+  },
+  "generation": {
+    "model": "veo3.1-fast",
+    "aspect_ratio": "9:16",
+    "enhance_prompt": false,
+    "enable_upsample": true,
+    "image_to_video": false,
+    "images": [],
+    "prompt": "竖屏 9:16，写实电影感。地府大殿里，一位判官站在高台上，豹眼狮鼻，面黑须长，头戴冕旒，身穿古代官袍，手持生死簿，威严庄重。镜头缓慢推近，突出判官在宣读命数的仪式感。随后画面从阴冷幽暗的地府突然转变成明亮壮丽的天宫，云海、金色宫阙、神光清晰可见。主角在转场中变化成阿修罗人，依然是人形，但更英武、更神异，站在天宫般的异界空间中。无字幕，无文字。",
+    "negative_prompt": "血腥，暴力，酷刑，怪物袭击，西方恶魔，西方天使，恐怖鬼脸，卡通，动漫，搞笑，字幕，文字，水印，低清晰度，手部畸形，多余肢体，现代法庭，现代城市，科幻，赛博朋克",
+    "output_name": "difu_judge_asura_9x16_retry",
+    "output_dir": "outputs/generated_veo"
+  }
+}

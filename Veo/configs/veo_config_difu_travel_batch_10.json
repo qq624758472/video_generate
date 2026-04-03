@@ -1,0 +1,31 @@
+{
+  "api": {
+    "api_key": "sk-y5q6SnVpzbXdAB9ekOEL4NHJeOOwA5A6ZeX54H7i8teToKwv",
+    "base_url": "https://foxi-ai.top",
+    "timeout": 900,
+    "poll_interval": 5
+  },
+  "generation": {
+    "model": "veo3.1-fast",
+    "aspect_ratio": "9:16",
+    "enhance_prompt": false,
+    "enable_upsample": true,
+    "image_to_video": false,
+    "images": [],
+    "prompt": "",
+    "negative_prompt": "恐怖惊吓，血腥暴力，怪物袭击，鬼脸特写，字幕，文字，水印，低清晰度，手部畸形，多余肢体，现代城市，科幻机甲，赛博朋克，卡通动画风",
+    "output_name": "difu_travel_batch",
+    "output_dir": "outputs/generated_veo"
+  },
+  "batch": {
+    "variants_per_scene": 1,
+    "start_index": 1,
+    "end_index": 10,
+    "output_dir": "outputs/generated_veo_difu_batch"
+  },
+  "prompt_style": {
+    "common_style": "全片为中文语义提示词驱动的地府游记短视频，重点突出场景观光、地标展示、空间纵深、环境奇观、古老秩序与异世界旅行体验。画面真实细腻，镜头平稳流动，适合短视频平台传播的竖屏构图。",
+    "negative_prompt": "过度恐怖，血浆，审讯行刑，追逐打斗，现代霓虹，英文字幕，UI 元素",
+    "variant_notes": {}
+  }
+}

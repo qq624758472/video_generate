@@ -1,0 +1,20 @@
+{
+  "api": {
+    "api_key": "sk-y5q6SnVpzbXdAB9ekOEL4NHJeOOwA5A6ZeX54H7i8teToKwv",
+    "base_url": "https://foxi-ai.top",
+    "timeout": 900,
+    "poll_interval": 5
+  },
+  "generation": {
+    "model": "veo3.1-fast",
+    "aspect_ratio": "9:16",
+    "enhance_prompt": false,
+    "enable_upsample": true,
+    "image_to_video": false,
+    "images": [],
+    "prompt": "竖屏 9:16，中文剧情短视频，电影化写实风格。第一幕表现一个人去世后进入地府的开端。开场镜头：一位年迈老人安静地躺在床上，室内是传统家庭卧室，床边围着子孙后代，神情悲伤，紧紧拉着老人的手，画面真实克制，有临终送别的氛围。特写镜头聚焦老人被握住的手，手指逐渐失去力气，随后手慢慢垂落，明确表现生命结束的一刻。转场后，整体色调突然变得阴冷、青灰、寂静，房间像被抽空一样，刚才围在床边的子孙全部消失不见。镜头缓慢拉开，床边和房间深处出现牛头、马面、黑无常、白无常，他们身形高大，庄严肃穆，带有中国神话地府使者的视觉特征，不要做成血腥恐怖怪物，而是神秘、威严、超现实。画面重点表现死亡后的空间变化、气氛骤冷、阴差现身的压迫感与仪式感。镜头平稳，细节清晰，无字幕，无文字，无水印。",
+    "negative_prompt": "搞笑，卡通，动漫，现代警察，西方死神，丧尸，血浆，肢体残缺，过度惊悚，鬼脸贴脸，字幕，文字，水印，低清晰度，手部畸形，多余肢体，现代医院手术室，科幻机甲，赛博朋克",
+    "output_name": "difu_death_scene1_9x16",
+    "output_dir": "outputs/generated_veo"
+  }
+}

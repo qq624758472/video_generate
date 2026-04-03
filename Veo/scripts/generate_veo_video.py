@@ -154,7 +154,7 @@ def main() -> int:
         str(generation.get("negative_prompt", "")).strip(),
     )
     output_name = str(generation.get("output_name", "veo_video")).strip() or "veo_video"
-    output_dir = Path(str(generation.get("output_dir", "generated_veo")).strip() or "generated_veo")
+    output_dir = Path(str(generation.get("output_dir", "outputs/generated_veo")).strip() or "outputs/generated_veo")
 
     if not api_key:
         print("缺少 API Key", file=sys.stderr)

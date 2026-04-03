@@ -15,13 +15,13 @@
     "prompt": "A breathtaking celestial palace on the top of the clouds, like a divine heavenly kingdom floating in the sky. Endless cloud ocean, radiant golden temples, jade terraces, luminous sky bridges, sacred towers, floating pavilions, colorful glow, soft holy mist, drifting flower petals, and elegant flying apsaras in the distance. The whole scene feels extremely ethereal, graceful, dreamy, and immortal, with rich layers of clouds and divine light. Slow cinematic aerial movement, majestic fantasy realism, ultra beautiful heavenly atmosphere.",
     "negative_prompt": "blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting",
     "output_name": "jingang_scene",
-    "output_dir": "generated_veo"
+    "output_dir": "outputs/generated_veo"
   },
   "batch": {
     "variants_per_scene": 1,
     "start_index": 1,
     "end_index": 9,
-    "output_dir": "generated_veo_batch_v3fast"
+    "output_dir": "outputs/generated_veo_batch_v3fast"
   },
   "prompt_style": {
     "common_style": "Epic Buddhist fantasy cinema, celestial realm above the clouds, colossal golden Buddha, sacred atmosphere, floating heavenly palaces, fragrant flower rain, glowing colorful aura, Dunhuang flying apsaras circling in the air, divine ribbons, grand scale, majestic light, slow camera movement, highly cinematic, 16:9 widescreen.",

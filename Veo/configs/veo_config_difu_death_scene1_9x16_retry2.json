@@ -1,0 +1,20 @@
+{
+  "api": {
+    "api_key": "sk-y5q6SnVpzbXdAB9ekOEL4NHJeOOwA5A6ZeX54H7i8teToKwv",
+    "base_url": "https://foxi-ai.top",
+    "timeout": 900,
+    "poll_interval": 5
+  },
+  "generation": {
+    "model": "veo3-fast",
+    "aspect_ratio": "9:16",
+    "enhance_prompt": false,
+    "enable_upsample": true,
+    "image_to_video": false,
+    "images": [],
+    "prompt": "竖屏 9:16，写实电影感，中国民俗传说氛围。夜晚卧室里，一位年迈老人安静躺在床上，子孙围在床边，握着他的手，神情悲伤不舍。镜头特写老人的手慢慢失去力量，手臂缓缓垂落，表现生命已经离去。随后房间气氛骤然变冷，色调变成青灰阴冷，屋内变得空荡安静，刚才围在床边的家人都消失了。镜头缓慢拉开，牛头、马面、黑无常、白无常从床边和阴影中现身，庄严、神秘、肃穆，像中国神话中的地府引路使者。强调转场变化、空间寂静感、超现实仪式感。无字幕，无文字，无水印。",
+    "negative_prompt": "血腥，暴力，怪物袭击，搞笑，卡通，动漫，西方死神，丧尸，现代医院，字幕，文字，水印，低清晰度，手部畸形，多余肢体，科幻，赛博朋克",
+    "output_name": "difu_death_scene1_9x16_retry2",
+    "output_dir": "outputs/generated_veo"
+  }
+}

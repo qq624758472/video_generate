@@ -1,0 +1,20 @@
+{
+  "api": {
+    "api_key": "sk-y5q6SnVpzbXdAB9ekOEL4NHJeOOwA5A6ZeX54H7i8teToKwv",
+    "base_url": "https://foxi-ai.top",
+    "timeout": 900,
+    "poll_interval": 5
+  },
+  "generation": {
+    "model": "veo3.1-fast",
+    "aspect_ratio": "9:16",
+    "enhance_prompt": false,
+    "enable_upsample": true,
+    "image_to_video": false,
+    "images": [],
+    "prompt": "竖屏 9:16，写实电影感，中国神话天宫场景。高空慢推航拍开场，镜头从漫天鎏金祥云缓缓下移，全景铺展天宫全貌。琼楼玉宇依山而建，错落排布在云海之上，朱红宫墙配鎏金飞檐，檐角悬挂珍珠风铃，随风轻摇，折射细碎金光。云海翻涌之间，宫殿楼宇若隐若现，仿佛悬浮在天地之间，仙气氤氲，没有人间烟火气。全程柔光包裹，暖金色调，突出天宫的庄严、璀璨、宏大与神圣。无字幕，无文字，无水印。",
+    "negative_prompt": "现代城市，科幻，赛博朋克，西方城堡，黑暗恐怖，血腥，卡通，动漫，搞笑，字幕，文字，水印，低清晰度，畸形建筑",
+    "output_name": "tiangong_aerial_9x16",
+    "output_dir": "outputs/generated_veo"
+  }
+}

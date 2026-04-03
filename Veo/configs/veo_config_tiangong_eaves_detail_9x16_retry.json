@@ -1,0 +1,20 @@
+{
+  "api": {
+    "api_key": "sk-y5q6SnVpzbXdAB9ekOEL4NHJeOOwA5A6ZeX54H7i8teToKwv",
+    "base_url": "https://foxi-ai.top",
+    "timeout": 900,
+    "poll_interval": 5
+  },
+  "generation": {
+    "model": "veo3.1-fast",
+    "aspect_ratio": "9:16",
+    "enhance_prompt": false,
+    "enable_upsample": true,
+    "image_to_video": false,
+    "images": [],
+    "prompt": "竖屏 9:16，写实电影感。慢动作特写天宫宫檐细节，鎏金飞檐线条优雅，末端雕刻仙鸟，鸟喙衔着玉铃，风过铃响。檐下悬挂成串彩色琉璃灯，通透如宝石，灯火永恒不熄，暖光透过琉璃投下斑驳彩影。突出材质、光影和天宫建筑的精巧华贵。无字幕，无文字。",
+    "negative_prompt": "现代建筑，霓虹灯牌，科幻，赛博朋克，黑暗恐怖，血腥，卡通，动漫，搞笑，字幕，文字，水印，低清晰度，畸形结构",
+    "output_name": "tiangong_eaves_detail_9x16_retry",
+    "output_dir": "outputs/generated_veo"
+  }
+}
