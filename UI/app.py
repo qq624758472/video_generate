@@ -222,32 +222,48 @@ class VeoTab(ProviderTab):
         self.api_key = QLineEdit(str(defaults.get("API_KEY", "")))
         self.base_url = QLineEdit(ui_backend.normalize_base_root(str(defaults.get("BASE_URL", ""))))
         self.prompt = QPlainTextEdit()
-        self.prompt.setPlainText(
-            "Early morning in ancient India near Sravasti. Misty countryside, trees, soft sunrise light, distant monastery, very slow aerial shot, calm and realistic cinematic style."
-        )
+        self.prompt.setPlainText(str(defaults.get("PROMPT", "")))
+        self.negative_prompt = QPlainTextEdit()
+        self.negative_prompt.setPlainText(str(defaults.get("NEGATIVE_PROMPT", "")))
         self.model = QComboBox()
         self.model.addItems(["veo3.1-fast", "veo3-fast", "veo3", "veo3-pro", "veo2", "veo2-fast", "veo2-pro"])
+        current_model = str(defaults.get("MODEL", "veo3.1-fast"))
+        index = self.model.findText(current_model)
+        if index >= 0:
+            self.model.setCurrentIndex(index)
         self.aspect_ratio = QComboBox()
-        self.aspect_ratio.addItems(["16:9", "9:16"])
+        self.aspect_ratio.addItems(["", "16:9", "9:16"])
+        current_ratio = str(defaults.get("ASPECT_RATIO", "16:9"))
+        ratio_index = self.aspect_ratio.findText(current_ratio)
+        if ratio_index >= 0:
+            self.aspect_ratio.setCurrentIndex(ratio_index)
         self.enhance_prompt = QCheckBox("自动优化提示词")
+        self.enhance_prompt.setChecked(bool(defaults.get("ENHANCE_PROMPT", False)))
         self.enable_upsample = QCheckBox("提升到 1080p")
-        self.enable_upsample.setChecked(True)
+        self.enable_upsample.setChecked(bool(defaults.get("ENABLE_UPSAMPLE", True)))
+        self.image_to_video = QCheckBox("图生视频")
+        self.image_to_video.setChecked(bool(defaults.get("IMAGE_TO_VIDEO", False)))
+        self.images = QPlainTextEdit()
+        self.images.setPlainText("\n".join(defaults.get("IMAGES", [])))
         self.timeout = QSpinBox()
         self.timeout.setRange(30, 7200)
         self.timeout.setValue(int(defaults.get("TIMEOUT", 900)))
         self.poll_interval = QSpinBox()
         self.poll_interval.setRange(1, 120)
         self.poll_interval.setValue(int(defaults.get("POLL_INTERVAL", 5)))
-        self.output_name = QLineEdit("veo_ui_test")
+        self.output_name = QLineEdit(str(defaults.get("OUTPUT_NAME", "veo_ui_test")))
 
         self.form_layout.addRow("API Key", self.api_key)
         self.form_layout.addRow("Base URL", self.base_url)
         self.form_layout.addRow("任务名称", self.output_name)
         self.form_layout.addRow("Prompt", self.prompt)
+        self.form_layout.addRow("Negative Prompt", self.negative_prompt)
         self.form_layout.addRow("Model", self.model)
         self.form_layout.addRow("Aspect Ratio", self.aspect_ratio)
         self.form_layout.addRow("", self.enhance_prompt)
         self.form_layout.addRow("", self.enable_upsample)
+        self.form_layout.addRow("", self.image_to_video)
+        self.form_layout.addRow("Images", self.images)
         self.form_layout.addRow("Timeout", self.timeout)
         self.form_layout.addRow("Poll Interval", self.poll_interval)
 
@@ -256,14 +272,39 @@ class VeoTab(ProviderTab):
     def start_task(self) -> None:
         self.log_output.clear()
         self.base_url.setText(ui_backend.normalize_base_root(self.base_url.text()))
+        image_lines = [line.strip() for line in self.images.toPlainText().splitlines() if line.strip()]
+        ui_backend.save_veo_config(
+            {
+                "api": {
+                    "api_key": self.api_key.text().strip(),
+                    "base_url": self.base_url.text().strip(),
+                    "timeout": self.timeout.value(),
+                    "poll_interval": self.poll_interval.value(),
+                },
+                "generation": {
+                    "model": self.model.currentText(),
+                    "aspect_ratio": self.aspect_ratio.currentText(),
+                    "enhance_prompt": self.enhance_prompt.isChecked(),
+                    "enable_upsample": self.enable_upsample.isChecked(),
+                    "image_to_video": self.image_to_video.isChecked(),
+                    "images": image_lines,
+                    "prompt": self.prompt.toPlainText().strip(),
+                    "negative_prompt": self.negative_prompt.toPlainText().strip(),
+                    "output_name": self.output_name.text().strip(),
+                },
+            }
+        )
         kwargs = {
             "api_key": self.api_key.text().strip(),
             "base_url": self.base_url.text().strip(),
             "prompt": self.prompt.toPlainText().strip(),
+            "negative_prompt": self.negative_prompt.toPlainText().strip(),
             "model": self.model.currentText(),
             "aspect_ratio": self.aspect_ratio.currentText(),
             "enhance_prompt": self.enhance_prompt.isChecked(),
             "enable_upsample": self.enable_upsample.isChecked(),
+            "image_to_video": self.image_to_video.isChecked(),
+            "images": image_lines,
             "timeout": self.timeout.value(),
             "poll_interval": self.poll_interval.value(),
             "output_name": self.output_name.text().strip(),

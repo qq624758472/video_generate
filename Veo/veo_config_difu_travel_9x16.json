@@ -1,0 +1,20 @@
+{
+  "api": {
+    "api_key": "sk-y5q6SnVpzbXdAB9ekOEL4NHJeOOwA5A6ZeX54H7i8teToKwv",
+    "base_url": "https://foxi-ai.top",
+    "timeout": 900,
+    "poll_interval": 5
+  },
+  "generation": {
+    "model": "veo3.1-fast",
+    "aspect_ratio": "9:16",
+    "enhance_prompt": false,
+    "enable_upsample": true,
+    "image_to_video": false,
+    "images": [],
+    "prompt": "Vertical 9:16 cinematic fantasy travel video, first-person livestream style, unusual underworld tourism in ancient Chinese mythology. Focus on extraordinary scenery rather than horror. Opening shot: a young Chinese female host leans close to the camera with surprised curiosity, then turns to reveal a mysterious underworld travel route. The camera explores spectacular landmark scenes: Naihe Bridge suspended over mist, Ox-Head and Horse-Face standing like iconic gate guardians, a vast field of red spider lilies taller than people along the Yellow Springs Road, layered stone paths, ancient underworld architecture, glowing lanterns, drifting fog, flowing river, grand scenic composition. The atmosphere is mysterious, wondrous, and otherworldly, like visiting a rare hidden destination, not scary. Smooth cinematic movement, rich environment detail, immersive sightseeing feeling, no text, no subtitles.",
+    "negative_prompt": "horror, gore, monster attack, jump scare, bloody violence, dark terror mood, blurry, watermark, subtitles, text, low quality, cartoon, anime, comedy, extra fingers, deformed hands, modern city, sci-fi, cyberpunk",
+    "output_name": "difu_travel_9x16",
+    "output_dir": "generated_veo"
+  }
+}

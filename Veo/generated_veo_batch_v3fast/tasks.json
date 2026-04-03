@@ -1,0 +1,335 @@
+[
+  {
+    "output_name": "jing1",
+    "scene_name": "jing1",
+    "variant_index": 1,
+    "variants_per_scene": 1,
+    "task_id": "veo3-fast:1774776446-Aksvg2V0Nq",
+    "status": "completed",
+    "model": "veo3-fast",
+    "aspect_ratio": "16:9",
+    "submit_result": {
+      "task_id": "veo3-fast:1774776446-Aksvg2V0Nq"
+    },
+    "prompt": "Inside a sacred cave-temple suspended above the clouds at dawn, a weathered hand gently brushes over palm-leaf sutra pages. The camera reveals the words 'Thus have I heard' glowing softly while candle flames sway in the spiritual wind. The view slowly pulls back to reveal Ananda seated in reverent silence, with monks recording scriptures behind him. Epic Buddhist fantasy cinema, celestial realm above the clouds, colossal golden Buddha, sacred atm Avoid: blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting.",
+    "original_prompt": "Inside a sacred cave-temple suspended above the clouds at dawn, a weathered hand gently brushes over palm-leaf sutra pages. The camera reveals the words 'Thus have I heard' glowing softly while candle flames sway in the spiritual wind. The view slowly pulls back to reveal Ananda seated in reverent silence, with monks recording scriptures behind him. Epic Buddhist fantasy cinema, celestial realm above the clouds, colossal golden Buddha, sacred atmosphere, floating heavenly palaces, fragrant flower rain, glowing colorful aura, Dunhuang flying apsaras circling in the air, divine ribbons, grand scale, majestic light, slow camera movement, highly cinematic, 16:9 widescreen. Avoid: blurry, text, watermark, low quality, deformed face, deformed hands, extra limbs, modern buildings, modern clothing, chaotic composition. Avoid: blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting.",
+    "negative_prompt": "blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting",
+    "retry_level": 2,
+    "plan_note": "每个分镜提交 1 个变体视频任务。",
+    "progress": "100%",
+    "error": "",
+    "status_result": {
+      "task_id": "veo3-fast:1774776446-Aksvg2V0Nq",
+      "platform": "google",
+      "action": "google-videos",
+      "status": "SUCCESS",
+      "fail_reason": "",
+      "submit_time": 1774776448,
+      "start_time": 1774776458,
+      "finish_time": 1774776958,
+      "progress": "100%",
+      "data": {
+        "output": "https://filesystem.site/cdn/20260329/846aa2c0a6c9ff584b82e2f1a5ae91.mp4"
+      },
+      "cost": 1.5,
+      "search_item": ""
+    },
+    "file": "generated_veo_batch_v3fast/downloads/jing1_veo3-fast:1774776446-Aksvg2V0Nq.mp4"
+  },
+  {
+    "output_name": "jing2",
+    "scene_name": "jing2",
+    "variant_index": 1,
+    "variants_per_scene": 1,
+    "task_id": "veo3-fast:1774776449-e8kEzeg73a",
+    "status": "completed",
+    "model": "veo3-fast",
+    "aspect_ratio": "16:9",
+    "submit_result": {
+      "task_id": "veo3-fast:1774776449-e8kEzeg73a"
+    },
+    "prompt": "In the celestial vision of ancient India near Sravasti, vast misty forests, sala trees, and mango groves spread beneath a sea of clouds. Soft sunbeams pierce the dawn mist, and the distant monastery appears like a holy sanctuary between heaven and earth. A very slow aerial camera movement glides across the landscape with solemn peace. Epic Buddhist fantasy cinema, celestial realm above the clouds, colossal golden Buddha, sacred atmosphere, floati Avoid: blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting.",
+    "original_prompt": "In the celestial vision of ancient India near Sravasti, vast misty forests, sala trees, and mango groves spread beneath a sea of clouds. Soft sunbeams pierce the dawn mist, and the distant monastery appears like a holy sanctuary between heaven and earth. A very slow aerial camera movement glides across the landscape with solemn peace. Epic Buddhist fantasy cinema, celestial realm above the clouds, colossal golden Buddha, sacred atmosphere, floating heavenly palaces, fragrant flower rain, glowing colorful aura, Dunhuang flying apsaras circling in the air, divine ribbons, grand scale, majestic light, slow camera movement, highly cinematic, 16:9 widescreen. Avoid: blurry, text, watermark, low quality, deformed face, deformed hands, extra limbs, modern buildings, modern clothing, chaotic composition. Avoid: blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting.",
+    "negative_prompt": "blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting",
+    "retry_level": 2,
+    "plan_note": "每个分镜提交 1 个变体视频任务。",
+    "progress": "100%",
+    "error": "",
+    "status_result": {
+      "task_id": "veo3-fast:1774776449-e8kEzeg73a",
+      "platform": "google",
+      "action": "google-videos",
+      "status": "SUCCESS",
+      "fail_reason": "",
+      "submit_time": 1774776451,
+      "start_time": 1774776461,
+      "finish_time": 1774776791,
+      "progress": "100%",
+      "data": {
+        "output": "https://filesystem.site/cdn/20260329/74dd629f2ee6559eb900c300e3c455.mp4"
+      },
+      "cost": 1.5,
+      "search_item": ""
+    },
+    "file": "generated_veo_batch_v3fast/downloads/jing2_veo3-fast:1774776449-e8kEzeg73a.mp4"
+  },
+  {
+    "output_name": "jing3",
+    "scene_name": "jing3",
+    "variant_index": 1,
+    "variants_per_scene": 1,
+    "task_id": "veo3-fast:1774776571-jEEUBZTxOk",
+    "status": "completed",
+    "model": "veo3-fast",
+    "aspect_ratio": "16:9",
+    "submit_result": {
+      "task_id": "veo3-fast:1774776571-jEEUBZTxOk"
+    },
+    "prompt": "Outside the monastic dwellings in the holy dawn, wooden doors open one by one and monks in reddish-brown robes step out quietly in perfect order. They adjust robes and clean alms bowls as flower petals drift through the air. The camera follows them at eye leve Avoid: blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting.",
+    "original_prompt": "Outside the monastic dwellings in the holy dawn, wooden doors open one by one and monks in reddish-brown robes step out quietly in perfect order. They adjust robes and clean alms bowls as flower petals drift through the air. The camera follows them at eye level with calm sacred realism. Epic Buddhist fantasy cinema, celestial realm above the clouds, colossal golden Buddha, sacred atmosphere, floating heavenly palaces, fragrant flower rain, glowing colorful aura, Dunhuang flying apsaras circling in the air, divine ribbons, grand scale, majestic light, slow camera movement, highly cinematic, 16:9 widescreen. Avoid: blurry, text, watermark, low quality, deformed face, deformed hands, extra limbs, modern buildings, modern clothing, chaotic composition. Avoid: blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting.",
+    "negative_prompt": "blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting",
+    "retry_level": 3,
+    "plan_note": "每个分镜提交 1 个变体视频任务。",
+    "progress": "100%",
+    "error": "",
+    "status_result": {
+      "task_id": "veo3-fast:1774776571-jEEUBZTxOk",
+      "platform": "google",
+      "action": "google-videos",
+      "status": "SUCCESS",
+      "fail_reason": "",
+      "submit_time": 1774776573,
+      "start_time": 1774776584,
+      "finish_time": 1774776794,
+      "progress": "100%",
+      "data": {
+        "output": "https://filesystem.site/cdn/20260329/2137645373093df14ef913970fe860.mp4"
+      },
+      "cost": 1.5,
+      "search_item": ""
+    },
+    "file": "generated_veo_batch_v3fast/downloads/jing3_veo3-fast:1774776571-jEEUBZTxOk.mp4"
+  },
+  {
+    "output_name": "jing4",
+    "scene_name": "jing4",
+    "variant_index": 1,
+    "variants_per_scene": 1,
+    "task_id": "veo3-fast:1774774888-LX0KPVpWyK",
+    "status": "completed",
+    "model": "veo3-fast",
+    "aspect_ratio": "16:9",
+    "submit_result": {
+      "task_id": "veo3-fast:1774774888-LX0KPVpWyK"
+    },
+    "prompt": "The central wooden door opens and the Buddha emerges with serene expression and immeasurable dignity. He slowly arranges his robe, lifts a simple alms bowl, and steps barefoot onto cool stone slabs that shine with faint golden light. Every gesture is calm, precise, and filled with spiritual gravity. Epic Buddhist fantasy cinema, celestial realm above the clouds, colossal golden Buddha, sacred atmosphere, floating heavenly palaces, fragrant flower rain, glowing colorful aura, Dunhuang flying apsaras circling in the air, divine ribbons, grand scale, majestic light, slow camera movement, highly cinematic, 16:9 widescreen. Avoid: blurry, text, watermark, low quality, deformed face, deformed hands, extra limbs, modern buildings, modern clothing, chaotic composition. Avoid: blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting.",
+    "original_prompt": "The central wooden door opens and the Buddha emerges with serene expression and immeasurable dignity. He slowly arranges his robe, lifts a simple alms bowl, and steps barefoot onto cool stone slabs that shine with faint golden light. Every gesture is calm, precise, and filled with spiritual gravity. Epic Buddhist fantasy cinema, celestial realm above the clouds, colossal golden Buddha, sacred atmosphere, floating heavenly palaces, fragrant flower rain, glowing colorful aura, Dunhuang flying apsaras circling in the air, divine ribbons, grand scale, majestic light, slow camera movement, highly cinematic, 16:9 widescreen. Avoid: blurry, text, watermark, low quality, deformed face, deformed hands, extra limbs, modern buildings, modern clothing, chaotic composition. Avoid: blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting.",
+    "negative_prompt": "blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting",
+    "retry_level": 0,
+    "plan_note": "每个分镜提交 1 个变体视频任务。",
+    "status_result": {
+      "task_id": "veo3-fast:1774774888-LX0KPVpWyK",
+      "platform": "google",
+      "action": "google-videos",
+      "status": "SUCCESS",
+      "fail_reason": "",
+      "submit_time": 1774774890,
+      "start_time": 1774774900,
+      "finish_time": 1774775110,
+      "progress": "100%",
+      "data": {
+        "output": "https://filesystem.site/cdn/20260329/d0a99d4a464307c17023a40e4e17f2.mp4"
+      },
+      "cost": 1.5,
+      "search_item": ""
+    },
+    "progress": "100%",
+    "file": "generated_veo_batch_v3fast/downloads/jing4_veo3-fast:1774774888-LX0KPVpWyK.mp4",
+    "error": ""
+  },
+  {
+    "output_name": "jing5",
+    "scene_name": "jing5",
+    "variant_index": 1,
+    "variants_per_scene": 1,
+    "task_id": "veo3-fast:1774776454-ZL994uZLIa",
+    "status": "completed",
+    "model": "veo3-fast",
+    "aspect_ratio": "16:9",
+    "submit_result": {
+      "task_id": "veo3-fast:1774776454-ZL994uZLIa"
+    },
+    "prompt": "The Buddha walks at the head of the assembly while monks follow in perfect formation toward the city. The procession passes through an ancient gate into a living world of merchants, women, children, brahmins, and beggars. People respectfully bow, offer food, and the Buddha responds with compassionate stillness. Epic Buddhist fantasy cinema, celestial realm above the clouds, colossal golden Buddha, sacred atmosphere, floating heavenly palaces, fra Avoid: blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting.",
+    "original_prompt": "The Buddha walks at the head of the assembly while monks follow in perfect formation toward the city. The procession passes through an ancient gate into a living world of merchants, women, children, brahmins, and beggars. People respectfully bow, offer food, and the Buddha responds with compassionate stillness. Epic Buddhist fantasy cinema, celestial realm above the clouds, colossal golden Buddha, sacred atmosphere, floating heavenly palaces, fragrant flower rain, glowing colorful aura, Dunhuang flying apsaras circling in the air, divine ribbons, grand scale, majestic light, slow camera movement, highly cinematic, 16:9 widescreen. Avoid: blurry, text, watermark, low quality, deformed face, deformed hands, extra limbs, modern buildings, modern clothing, chaotic composition. Avoid: blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting.",
+    "negative_prompt": "blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting",
+    "retry_level": 2,
+    "plan_note": "每个分镜提交 1 个变体视频任务。",
+    "progress": "100%",
+    "error": "",
+    "status_result": {
+      "task_id": "veo3-fast:1774776454-ZL994uZLIa",
+      "platform": "google",
+      "action": "google-videos",
+      "status": "SUCCESS",
+      "fail_reason": "",
+      "submit_time": 1774776455,
+      "start_time": 1774776466,
+      "finish_time": 1774776666,
+      "progress": "100%",
+      "data": {
+        "output": "https://filesystem.site/cdn/20260329/bdfd6c6f0ff2623bb7b012494e4070.mp4"
+      },
+      "cost": 1.5,
+      "search_item": ""
+    },
+    "file": "generated_veo_batch_v3fast/downloads/jing5_veo3-fast:1774776454-ZL994uZLIa.mp4"
+  },
+  {
+    "output_name": "jing6",
+    "scene_name": "jing6",
+    "variant_index": 1,
+    "variants_per_scene": 1,
+    "task_id": "veo3-fast:1774776396-xIpfgPxT4m",
+    "status": "completed",
+    "model": "veo3-fast",
+    "aspect_ratio": "16:9",
+    "submit_result": {
+      "task_id": "veo3-fast:1774776396-xIpfgPxT4m"
+    },
+    "prompt": "A cross-cut montage shows the Buddha receiving alms equally from all beings. A poor woman offers a little coarse rice from a clay jar, while a wealthy household presents rich food. The Buddha accepts both with the same compassion, never taking more than needed, while monks continue their orderly alms round. Epic Buddhist fantasy cinema, celestial realm above the clouds, colossal golden Buddha, sacred atmosphere, floating heavenly palaces, fragrant flower rain, glowing colorful aura, Dunhuang flying apsaras circling in the air, divine ribbons, grand scale, majestic light, slow camera movement, highly cinematic, 16:9 widescreen. Avoid: blurry, text, watermark, low quality, deformed face, defor Avoid: blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting.",
+    "original_prompt": "A cross-cut montage shows the Buddha receiving alms equally from all beings. A poor woman offers a little coarse rice from a clay jar, while a wealthy household presents rich food. The Buddha accepts both with the same compassion, never taking more than needed, while monks continue their orderly alms round. Epic Buddhist fantasy cinema, celestial realm above the clouds, colossal golden Buddha, sacred atmosphere, floating heavenly palaces, fragrant flower rain, glowing colorful aura, Dunhuang flying apsaras circling in the air, divine ribbons, grand scale, majestic light, slow camera movement, highly cinematic, 16:9 widescreen. Avoid: blurry, text, watermark, low quality, deformed face, deformed hands, extra limbs, modern buildings, modern clothing, chaotic composition. Avoid: blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting.",
+    "negative_prompt": "blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting",
+    "retry_level": 1,
+    "plan_note": "每个分镜提交 1 个变体视频任务。",
+    "progress": "100%",
+    "error": "",
+    "status_result": {
+      "task_id": "veo3-fast:1774776396-xIpfgPxT4m",
+      "platform": "google",
+      "action": "google-videos",
+      "status": "SUCCESS",
+      "fail_reason": "",
+      "submit_time": 1774776398,
+      "start_time": 1774776409,
+      "finish_time": 1774776429,
+      "progress": "100%",
+      "data": {
+        "output": "https://filesystem.site/cdn/20260329/b846fef89bfa549896c4a68ead3ce1.mp4"
+      },
+      "cost": 0,
+      "search_item": ""
+    },
+    "file": "generated_veo_batch_v3fast/downloads/jing6_veo3-fast:1774776396-xIpfgPxT4m.mp4"
+  },
+  {
+    "output_name": "jing7",
+    "scene_name": "jing7",
+    "variant_index": 1,
+    "variants_per_scene": 1,
+    "task_id": "veo3-fast:1774774895-px30ZvyN4n",
+    "status": "completed",
+    "model": "veo3-fast",
+    "aspect_ratio": "16:9",
+    "submit_result": {
+      "task_id": "veo3-fast:1774774895-px30ZvyN4n"
+    },
+    "prompt": "Before noon, under bright and gentle sunlight, the Buddha and the monks return from the city to Jetavana. The camera follows from behind as their shadows stretch across the ground and the noise of the worldly streets fades away. They move back toward trees, silence, and sacred calm. Epic Buddhist fantasy cinema, celestial realm above the clouds, colossal golden Buddha, sacred atmosphere, floating heavenly palaces, fragrant flower rain, glowing colorful aura, Dunhuang flying apsaras circling in the air, divine ribbons, grand scale, majestic light, slow camera movement, highly cinematic, 16:9 widescreen. Avoid: blurry, text, watermark, low quality, deformed face, deformed hands, extra limbs, modern buildings, modern clothing, chaotic composition. Avoid: blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting.",
+    "original_prompt": "Before noon, under bright and gentle sunlight, the Buddha and the monks return from the city to Jetavana. The camera follows from behind as their shadows stretch across the ground and the noise of the worldly streets fades away. They move back toward trees, silence, and sacred calm. Epic Buddhist fantasy cinema, celestial realm above the clouds, colossal golden Buddha, sacred atmosphere, floating heavenly palaces, fragrant flower rain, glowing colorful aura, Dunhuang flying apsaras circling in the air, divine ribbons, grand scale, majestic light, slow camera movement, highly cinematic, 16:9 widescreen. Avoid: blurry, text, watermark, low quality, deformed face, deformed hands, extra limbs, modern buildings, modern clothing, chaotic composition. Avoid: blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting.",
+    "negative_prompt": "blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting",
+    "retry_level": 0,
+    "plan_note": "每个分镜提交 1 个变体视频任务。",
+    "status_result": {
+      "task_id": "veo3-fast:1774774895-px30ZvyN4n",
+      "platform": "google",
+      "action": "google-videos",
+      "status": "SUCCESS",
+      "fail_reason": "",
+      "submit_time": 1774774896,
+      "start_time": 1774774906,
+      "finish_time": 1774775136,
+      "progress": "100%",
+      "data": {
+        "output": "https://filesystem.site/cdn/20260329/66e3c1772c5e191b44342a202117fb.mp4"
+      },
+      "cost": 1.5,
+      "search_item": ""
+    },
+    "progress": "100%",
+    "file": "generated_veo_batch_v3fast/downloads/jing7_veo3-fast:1774774895-px30ZvyN4n.mp4",
+    "error": ""
+  },
+  {
+    "output_name": "jing8",
+    "scene_name": "jing8",
+    "variant_index": 1,
+    "variants_per_scene": 1,
+    "task_id": "veo3-fast:1774776464-ZkuVlc6rIt",
+    "status": "completed",
+    "model": "veo3-fast",
+    "aspect_ratio": "16:9",
+    "submit_result": {
+      "task_id": "veo3-fast:1774776464-ZkuVlc6rIt"
+    },
+    "prompt": "In a quiet forest clearing, the Buddha and the monks sit and eat in silence. Close shots show the Buddha eating carefully without wasting even a grain, cleaning the bowl afterward, folding the robes neatly, and then walking barefoot to clear water to wash the dust from his feet. Epic Buddhist fantasy cinema, celestial realm above the clouds, colossal golden Buddha, sacred atmosphere, floating heavenly palaces, fragrant flower rain, glowing colorf Avoid: blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting.",
+    "original_prompt": "In a quiet forest clearing, the Buddha and the monks sit and eat in silence. Close shots show the Buddha eating carefully without wasting even a grain, cleaning the bowl afterward, folding the robes neatly, and then walking barefoot to clear water to wash the dust from his feet. Epic Buddhist fantasy cinema, celestial realm above the clouds, colossal golden Buddha, sacred atmosphere, floating heavenly palaces, fragrant flower rain, glowing colorful aura, Dunhuang flying apsaras circling in the air, divine ribbons, grand scale, majestic light, slow camera movement, highly cinematic, 16:9 widescreen. Avoid: blurry, text, watermark, low quality, deformed face, deformed hands, extra limbs, modern buildings, modern clothing, chaotic composition. Avoid: blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting.",
+    "negative_prompt": "blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting",
+    "retry_level": 2,
+    "plan_note": "每个分镜提交 1 个变体视频任务。",
+    "progress": "100%",
+    "error": "",
+    "status_result": {
+      "task_id": "veo3-fast:1774776464-ZkuVlc6rIt",
+      "platform": "google",
+      "action": "google-videos",
+      "status": "SUCCESS",
+      "fail_reason": "",
+      "submit_time": 1774776465,
+      "start_time": 1774776475,
+      "finish_time": 1774776665,
+      "progress": "100%",
+      "data": {
+        "output": "https://filesystem.site/cdn/20260329/a1acfdcc15cfc46836b980cd487d83.mp4"
+      },
+      "cost": 1.5,
+      "search_item": ""
+    },
+    "file": "generated_veo_batch_v3fast/downloads/jing8_veo3-fast:1774776464-ZkuVlc6rIt.mp4"
+  },
+  {
+    "output_name": "jing9",
+    "scene_name": "jing9",
+    "variant_index": 1,
+    "variants_per_scene": 1,
+    "task_id": "veo3-fast:1774776439-hBE3G21lNz",
+    "status": "completed",
+    "model": "veo3-fast",
+    "aspect_ratio": "16:9",
+    "submit_result": {
+      "task_id": "veo3-fast:1774776439-hBE3G21lNz"
+    },
+    "prompt": "After washing his feet, the Buddha returns to a great tree, lays out a grass mat with his own hands, and slowly sits in meditation. His posture becomes as steady as an ancient mountain while the monks sit behind him in complete stillness. Sunlight filters through leaves as the camera slowly pulls back into a vast sacred tableau. Epic Buddhist fantasy cinema, celestial realm above the clouds, colossal golden Buddha, sacred atmosphere, floating heavenly palaces, fragrant flower rain, glowing colorful aura, Dunhuang flying apsaras circling in the air, divine ribbons, grand scale, majestic light, slow camera movement, highly cinematic, 16:9 widescreen. Avoid: blurry, text, watermark, low quality Avoid: blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting.",
+    "original_prompt": "After washing his feet, the Buddha returns to a great tree, lays out a grass mat with his own hands, and slowly sits in meditation. His posture becomes as steady as an ancient mountain while the monks sit behind him in complete stillness. Sunlight filters through leaves as the camera slowly pulls back into a vast sacred tableau. Epic Buddhist fantasy cinema, celestial realm above the clouds, colossal golden Buddha, sacred atmosphere, floating heavenly palaces, fragrant flower rain, glowing colorful aura, Dunhuang flying apsaras circling in the air, divine ribbons, grand scale, majestic light, slow camera movement, highly cinematic, 16:9 widescreen. Avoid: blurry, text, watermark, low quality, deformed face, deformed hands, extra limbs, modern buildings, modern clothing, chaotic composition. Avoid: blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting.",
+    "negative_prompt": "blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting",
+    "retry_level": 1,
+    "plan_note": "每个分镜提交 1 个变体视频任务。",
+    "progress": "100%",
+    "error": "",
+    "status_result": {
+      "task_id": "veo3-fast:1774776439-hBE3G21lNz",
+      "platform": "google",
+      "action": "google-videos",
+      "status": "SUCCESS",
+      "fail_reason": "",
+      "submit_time": 1774776440,
+      "start_time": 1774776451,
+      "finish_time": 1774776791,
+      "progress": "100%",
+      "data": {
+        "output": "https://filesystem.site/cdn/20260329/9fb1506d05baa9f1b64d1c71c09f3e.mp4"
+      },
+      "cost": 1.5,
+      "search_item": ""
+    },
+    "file": "generated_veo_batch_v3fast/downloads/jing9_veo3-fast:1774776439-hBE3G21lNz.mp4"
+  }
+]

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import ast
+import json
 import re
 import sys
 from pathlib import Path
@@ -22,6 +23,7 @@ if str(ROOT_DIR / "keling") not in sys.path:
 import generate_video_with_character as sora_module  # noqa: E402
 import generate_veo_video as veo_module  # noqa: E402
 import test as sora_test_module  # noqa: E402
+from config_utils import load_config as load_veo_config_file, DEFAULT_CONFIG_PATH as VEO_CONFIG_NAME  # noqa: E402
 
 
 STATUS_RUNNING = {
@@ -69,10 +71,38 @@ def load_sora_defaults() -> Dict[str, Any]:
 
 
 def load_veo_defaults() -> Dict[str, Any]:
-    return load_python_assignments(
-        ROOT_DIR / "Veo" / "test.py",
-        {"API_KEY", "BASE_URL", "TIMEOUT", "POLL_INTERVAL"},
-    )
+    config = load_veo_config_file(ROOT_DIR / "Veo" / VEO_CONFIG_NAME)
+    api = config.get("api", {})
+    generation = config.get("generation", {})
+    return {
+        "API_KEY": str(api.get("api_key", "")).strip(),
+        "BASE_URL": str(api.get("base_url", "")).strip(),
+        "TIMEOUT": int(api.get("timeout", 900)),
+        "POLL_INTERVAL": int(api.get("poll_interval", 5)),
+        "MODEL": str(generation.get("model", "veo3.1-fast")).strip(),
+        "ASPECT_RATIO": str(generation.get("aspect_ratio", "16:9")).strip(),
+        "ENHANCE_PROMPT": bool(generation.get("enhance_prompt", False)),
+        "ENABLE_UPSAMPLE": bool(generation.get("enable_upsample", True)),
+        "PROMPT": str(generation.get("prompt", "")).strip(),
+        "NEGATIVE_PROMPT": str(generation.get("negative_prompt", "")).strip(),
+        "OUTPUT_NAME": str(generation.get("output_name", "veo_video")).strip(),
+        "IMAGE_TO_VIDEO": bool(generation.get("image_to_video", False)),
+        "IMAGES": list(generation.get("images", [])),
+    }
+
+
+def veo_config_path() -> Path:
+    return ROOT_DIR / "Veo" / VEO_CONFIG_NAME
+
+
+def save_veo_config(config_updates: Dict[str, Any]) -> None:
+    path = veo_config_path()
+    config = load_veo_config_file(path)
+    api_updates = config_updates.get("api", {})
+    generation_updates = config_updates.get("generation", {})
+    config.setdefault("api", {}).update(api_updates)
+    config.setdefault("generation", {}).update(generation_updates)
+    path.write_text(json.dumps(config, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def load_keling_defaults() -> Dict[str, Any]:
@@ -201,10 +231,13 @@ def submit_veo_generation(
     api_key: str,
     base_url: str,
     prompt: str,
+    negative_prompt: str,
     model: str,
     aspect_ratio: str,
     enhance_prompt: bool,
     enable_upsample: bool,
+    image_to_video: bool,
+    images: list[str],
     timeout: int,
     poll_interval: int,
     output_name: str,
@@ -214,11 +247,12 @@ def submit_veo_generation(
         raise RuntimeError("Veo Base URL 不能为空")
     client = veo_module.VeoVideoClient(api_key=api_key, base_root=normalized_base, timeout=timeout)
     result = client.create_generation(
-        prompt=prompt,
+        prompt=veo_module.build_request_prompt(prompt, negative_prompt),
         model=model,
         aspect_ratio=aspect_ratio,
         enhance_prompt=enhance_prompt,
         enable_upsample=enable_upsample,
+        images=veo_module.resolve_image_inputs(images) if image_to_video else None,
     )
     task_id = str(result.get("id") or result.get("task_id") or "").strip()
     if not task_id:
@@ -228,6 +262,7 @@ def submit_veo_generation(
         "task_id": task_id,
         "task_name": output_name.strip() or "veo_task",
         "prompt": prompt,
+        "negative_prompt": negative_prompt,
         "status": "submitted",
         "progress": "",
         "file": "",
@@ -241,6 +276,9 @@ def submit_veo_generation(
             "aspect_ratio": aspect_ratio,
             "enhance_prompt": enhance_prompt,
             "enable_upsample": enable_upsample,
+            "image_to_video": image_to_video,
+            "images": images,
+            "negative_prompt": negative_prompt,
         },
     }
 

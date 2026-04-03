@@ -1,25 +1,27 @@
 {
   "api": {
-    "api_key": "",
+    "api_key": "sk-y5q6SnVpzbXdAB9ekOEL4NHJeOOwA5A6ZeX54H7i8teToKwv",
     "base_url": "https://foxi-ai.top",
     "timeout": 900,
     "poll_interval": 5
   },
   "generation": {
-    "model": "veo3.1-fast",
+    "model": "veo3-fast",
     "aspect_ratio": "16:9",
     "enhance_prompt": false,
     "enable_upsample": true,
-    "prompt": "Early morning in ancient India near Sravasti. Misty countryside, trees, soft sunrise light, distant monastery, very slow aerial shot, calm and realistic cinematic style.",
-    "negative_prompt": "blurry, text, watermark, low quality, distorted anatomy, extra limbs, modern objects",
-    "output_name": "veo_video",
+    "image_to_video": false,
+    "images": [],
+    "prompt": "A breathtaking celestial palace on the top of the clouds, like a divine heavenly kingdom floating in the sky. Endless cloud ocean, radiant golden temples, jade terraces, luminous sky bridges, sacred towers, floating pavilions, colorful glow, soft holy mist, drifting flower petals, and elegant flying apsaras in the distance. The whole scene feels extremely ethereal, graceful, dreamy, and immortal, with rich layers of clouds and divine light. Slow cinematic aerial movement, majestic fantasy realism, ultra beautiful heavenly atmosphere.",
+    "negative_prompt": "blurry, text overlay, subtitles, watermark, low quality, dark horror mood, modern city, cyberpunk, western castle, gothic architecture, deformed structure, chaotic composition, ugly lighting",
+    "output_name": "jingang_scene",
     "output_dir": "generated_veo"
   },
   "batch": {
-    "variants_per_scene": 2,
+    "variants_per_scene": 1,
     "start_index": 1,
     "end_index": 9,
-    "output_dir": "generated_veo_batch"
+    "output_dir": "generated_veo_batch_v3fast"
   },
   "prompt_style": {
     "common_style": "Epic Buddhist fantasy cinema, celestial realm above the clouds, colossal golden Buddha, sacred atmosphere, floating heavenly palaces, fragrant flower rain, glowing colorful aura, Dunhuang flying apsaras circling in the air, divine ribbons, grand scale, majestic light, slow camera movement, highly cinematic, 16:9 widescreen.",

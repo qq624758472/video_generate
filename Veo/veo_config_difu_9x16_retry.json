@@ -1,0 +1,20 @@
+{
+  "api": {
+    "api_key": "sk-y5q6SnVpzbXdAB9ekOEL4NHJeOOwA5A6ZeX54H7i8teToKwv",
+    "base_url": "https://foxi-ai.top",
+    "timeout": 900,
+    "poll_interval": 5
+  },
+  "generation": {
+    "model": "veo3.1-fast",
+    "aspect_ratio": "9:16",
+    "enhance_prompt": false,
+    "enable_upsample": true,
+    "image_to_video": false,
+    "images": [],
+    "prompt": "Vertical 9:16 cinematic horror video, first-person livestream style. A terrified young Chinese female streamer leans close to the camera in a dark room, with a blurry black shadow hidden behind her. A sudden white flash pulls her into the underworld. Quick flash cuts show Naihe Bridge, Ox-Head and Horse-Face blocking the path, and a giant red spider lily field on the Yellow Springs Road. Dark ancient Chinese underworld, eerie mist, realistic suspense, smooth camera movement. Ending: she points at the viewer and leaves a midnight cliffhanger. No text.",
+    "negative_prompt": "blurry, watermark, subtitles, text, low quality, cartoon, anime, comedy, extra fingers, deformed hands, modern city, sci-fi, cyberpunk",
+    "output_name": "difu_first_person_9x16_retry",
+    "output_dir": "generated_veo"
+  }
+}
