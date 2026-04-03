@@ -1,0 +1,22 @@
+{
+  "api": {
+    "api_key": "sk-y5q6SnVpzbXdAB9ekOEL4NHJeOOwA5A6ZeX54H7i8teToKwv",
+    "base_url": "https://foxi-ai.top",
+    "timeout": 900,
+    "poll_interval": 5
+  },
+  "generation": {
+    "model": "veo3.1-fast",
+    "aspect_ratio": "9:16",
+    "enhance_prompt": false,
+    "enable_upsample": true,
+    "image_to_video": true,
+    "images": [
+      "input/meining_standard_768x1024.jpg"
+    ],
+    "prompt": "A graceful fantasy woman in pale green ancient dress stands in a sunlit forest. Keep the same face, hairstyle, outfit, accessories, and elegant ethereal temperament as the reference image. Gentle breeze moves her long hair and green ribbons, subtle breathing, soft blinking, slight head movement, delicate expression, warm dappled sunlight through the trees, shallow depth of field, cinematic portrait shot, natural motion, highly detailed, dreamy realism.",
+    "negative_prompt": "face change, identity drift, extra fingers, extra limbs, distorted hands, exaggerated motion, fast camera movement, low quality, blur, text, watermark, flicker, costume change, background collapse",
+    "output_name": "meining_forest_portrait",
+    "output_dir": "outputs/generated_veo"
+  }
+}
